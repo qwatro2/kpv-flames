@@ -12,9 +12,9 @@ public class Params {
     private boolean isSuccess = true;
     private String message = "Params got successfully";
 
-    private int numberOfSamples = 10;
-    private int numberOfTransformations = 10;
-    private int numberOfIterationsPerSample = 100000;
+    private int numberOfSamples = 1000;
+    private int numberOfTransformations = 100;
+    private int numberOfIterationsPerSample = 10000;
 
     private int width = 900;
     private int height = 900;
