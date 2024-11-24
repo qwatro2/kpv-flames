@@ -39,7 +39,15 @@ public class CliParamsGetter implements ParamsGetter {
             }
         }
 
+        checkAddedTransformations(result);
         return result;
+    }
+
+    private void checkAddedTransformations(Params params) {
+        if (params.nonlinearTransformations().isEmpty()) {
+            params.isSuccess(false);
+            params.message("At least one nonlinear transformation must be added");
+        }
     }
 
     private void processUnknownArgument(Params params, int index) {
