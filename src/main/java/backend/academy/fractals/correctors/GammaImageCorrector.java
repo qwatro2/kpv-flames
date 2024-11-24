@@ -1,0 +1,41 @@
+package backend.academy.fractals.correctors;
+
+import backend.academy.fractals.entities.Color;
+import backend.academy.fractals.entities.Pixel;
+import backend.academy.fractals.entities.PixelImage;
+
+public class GammaImageCorrector implements ImageCorrector {
+    private static final double GAMMA = 2.2;
+
+    @Override
+    public void correct(PixelImage image) {
+        int width = image.width();
+        int height = image.height();
+
+        double[] normals = new double[width * height];
+
+        double max = 0.0;
+        for (int row = 0; row < height; ++row) {
+            for (int col = 0; col < width; ++col) {
+                if (image.get(row, col).hitCount() != 0) {
+                    normals[row * width + col] = Math.log10(image.get(row, col).hitCount());
+                    if (normals[row * width + col] > max) {
+                        max = normals[row * width + col];
+                    }
+                }
+            }
+        }
+
+        for (int row = 0; row < height; ++row) {
+            for (int col = 0; col < width; ++col) {
+                normals[row * width + col] /= max;
+                Pixel currentPixel = image.get(row, col);
+                double multiplier = Math.pow(normals[row * width + col], 1.0 / GAMMA);
+                int newR = (int)(currentPixel.color().r() * multiplier);
+                int newG = (int)(currentPixel.color().g() * multiplier);
+                int newB = (int)(currentPixel.color().b() * multiplier);
+                currentPixel.color(new Color(newR, newG, newB));
+            }
+        }
+    }
+}
