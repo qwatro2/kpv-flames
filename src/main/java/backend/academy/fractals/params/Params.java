@@ -19,7 +19,7 @@ public class Params {
     private int width = 900;
     private int height = 900;
 
-    private Integer seed = 142857;
+    private Integer seed = null;
 
     private List<Transformation> nonlinearTransformations = new ArrayList<>();
 }
