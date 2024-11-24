@@ -9,4 +9,5 @@ public class NumbersParams {
     private int numberOfSamples = 1000;
     private int numberOfTransformations = 100;
     private int numberOfIterationsPerSample = 10000;
+    private int numberOfSymmetries = 1;
 }

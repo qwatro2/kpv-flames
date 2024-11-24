@@ -31,6 +31,7 @@ public class CliParamsGetter implements ParamsGetter {
                 case "--seed" -> this::processSeed;
                 case "--add-transformation" -> this::processAddTransformation;
                 case "--generation-order" -> this::processGenerationOrder;
+                case "--n-symmetries" -> this::processNumberOfSymmetries;
                 default -> this::processUnknownArgument;
             };
             biConsumer.accept(result, i);
@@ -100,6 +101,10 @@ public class CliParamsGetter implements ParamsGetter {
             return;
         }
         params.transformationsParams().generationOrder(value);
+    }
+
+    private void processNumberOfSymmetries(Params params, int index) {
+        processIntegerParam(params, n -> params.numbersParams().numberOfSymmetries(n), index);
     }
 
     private <T> void processIntegerParam(Params params, Function<Integer, T> field, int index) {
