@@ -42,11 +42,11 @@ public class SingleThreadedImageRenderer implements ImageRenderer {
         PointGeneratorFactory pointGeneratorFactory,
         NonlinearTransformationGeneratorFactory nonlinearTransformationGeneratorFactory
     ) {
-        this.numberOfSamples = params.numberOfSamples();
-        this.numberOfTransformations = params.numberOfTransformations();
-        this.numberOfIterationsPerSample = params.numberOfIterationsPerSample();
-        this.width = params.width();
-        this.height = params.height();
+        this.numberOfSamples = params.numbersParams().numberOfSamples();
+        this.numberOfTransformations = params.numbersParams().numberOfTransformations();
+        this.numberOfIterationsPerSample = params.numbersParams().numberOfIterationsPerSample();
+        this.width = params.sizeParams().width();
+        this.height = params.sizeParams().height();
 
         this.random = new Random();
         if (params.seed() != null) {
@@ -57,8 +57,10 @@ public class SingleThreadedImageRenderer implements ImageRenderer {
         this.colorGenerator = colorGenerator.setRandom(this.random);
 
         this.nonlinearTransformationGenerator =
-            nonlinearTransformationGeneratorFactory.produce(params.nonlinearTransformations(),
-                params.generationOrder()).setRandom(this.random);
+            nonlinearTransformationGeneratorFactory.produce(
+                params.transformationsParams().nonlinearTransformations(),
+                params.transformationsParams().generationOrder()
+            ).setRandom(this.random);
 
         GeneratorWithBounds productionResult = pointGeneratorFactory.produce(this.width, this.height);
         this.pointGenerator = productionResult.generator().setRandom(this.random);

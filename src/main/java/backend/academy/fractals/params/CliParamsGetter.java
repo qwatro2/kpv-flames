@@ -44,7 +44,7 @@ public class CliParamsGetter implements ParamsGetter {
     }
 
     private void checkAddedTransformations(Params params) {
-        if (params.nonlinearTransformations().isEmpty()) {
+        if (params.transformationsParams().nonlinearTransformations().isEmpty()) {
             params.isSuccess(false);
             params.message("At least one nonlinear transformation must be added");
         }
@@ -56,23 +56,23 @@ public class CliParamsGetter implements ParamsGetter {
     }
 
     private void processNumberOfSamples(Params params, int index) {
-        processIntegerParam(params, params::numberOfSamples, index);
+        processIntegerParam(params, n -> params.numbersParams().numberOfSamples(n), index);
     }
 
     private void processNumberOfTransformations(Params params, int index) {
-        processIntegerParam(params, params::numberOfTransformations, index);
+        processIntegerParam(params, n -> params.numbersParams().numberOfTransformations(n), index);
     }
 
     private void processNumberOfIterations(Params params, int index) {
-        processIntegerParam(params, params::numberOfIterationsPerSample, index);
+        processIntegerParam(params, n -> params.numbersParams().numberOfIterationsPerSample(n), index);
     }
 
     private void processWidth(Params params, int index) {
-        processIntegerParam(params, params::width, index);
+        processIntegerParam(params, n -> params.sizeParams().width(n), index);
     }
 
     private void processHeight(Params params, int index) {
-        processIntegerParam(params, params::height, index);
+        processIntegerParam(params, n -> params.sizeParams().height(n), index);
     }
 
     private void processSeed(Params params, int index) {
@@ -88,7 +88,7 @@ public class CliParamsGetter implements ParamsGetter {
                 args[index], args[index + 1]));
             return;
         }
-        params.nonlinearTransformations().add(value);
+        params.transformationsParams().nonlinearTransformations().add(value);
     }
 
     private void processGenerationOrder(Params params, int index) {
@@ -99,10 +99,10 @@ public class CliParamsGetter implements ParamsGetter {
                 + "{1} was passed", args[index], args[index + 1]));
             return;
         }
-        params.generationOrder(value);
+        params.transformationsParams().generationOrder(value);
     }
 
-    private void processIntegerParam(Params params, Function<Integer, Params> field, int index) {
+    private <T> void processIntegerParam(Params params, Function<Integer, T> field, int index) {
         Integer value = parseInteger(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
