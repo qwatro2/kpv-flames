@@ -11,6 +11,7 @@ import backend.academy.fractals.generators.Generator;
 import backend.academy.fractals.params.Params;
 import backend.academy.fractals.transformations.LinearTransformation;
 import backend.academy.fractals.transformations.Transformation;
+
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -34,6 +35,8 @@ public class SingleThreadedImageRenderer implements ImageRenderer {
     private final double xMax;
     private final double yMin;
     private final double yMax;
+
+    private final double numberOfSymmetries;
 
     public SingleThreadedImageRenderer(
         Params params,
@@ -68,6 +71,8 @@ public class SingleThreadedImageRenderer implements ImageRenderer {
         this.xMax = productionResult.xMax();
         this.yMin = productionResult.yMin();
         this.yMax = productionResult.yMax();
+
+        this.numberOfSymmetries = params.numbersParams().numberOfSymmetries();
     }
 
     @Override
@@ -99,8 +104,8 @@ public class SingleThreadedImageRenderer implements ImageRenderer {
             Transformation nonlinearTransformation =
                 nonlinearTransformationGenerator.next();
             Color color = colors.get(randomIndex);
-            point =
-                processOneSampleIterations(iter, linearTransformation, nonlinearTransformation, point, canvas, color);
+
+            point = processOneSampleIterations(iter, linearTransformation, nonlinearTransformation, point, canvas, color);
         }
     }
 
@@ -111,12 +116,21 @@ public class SingleThreadedImageRenderer implements ImageRenderer {
     ) {
         point = linearTransformation.andThen(nonlinearTransformation).apply(point);
 
-        if (iter >= 0 && isCorrectPoint(point)) {
-            int col = width - (int) (((xMax - point.x()) / (xMax - xMin)) * width);
-            int row = height - (int) (((yMax - point.y()) / (yMax - yMin)) * height);
+        if (iter >= 0) {
+            double theta2 = 0.0;
+            for (int s = 0; s < numberOfSymmetries; ++s) {
+                theta2 += 2 * Math.PI / numberOfSymmetries;
+                double xRot = point.x() * Math.cos(theta2) - point.y() * Math.sin(theta2);
+                double yRot = point.x() * Math.sin(theta2) + point.y() * Math.cos(theta2);
+                Point pointRot = new Point(xRot, yRot);
+                if (isCorrectPoint(pointRot)) {
+                    int col = width - (int) (((xMax - pointRot.x()) / (xMax - xMin)) * width);
+                    int row = height - (int) (((yMax - pointRot.y()) / (yMax - yMin)) * height);
 
-            if (0 <= col && col < width && 0 <= row && row < height) {
-                processCorrectRowCol(canvas, row, col, color);
+                    if (0 <= col && col < width && 0 <= row && row < height) {
+                        processCorrectRowCol(canvas, row, col, color);
+                    }
+                }
             }
         }
 
