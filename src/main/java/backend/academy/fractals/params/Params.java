@@ -22,4 +22,5 @@ public class Params {
     private Integer seed = null;
 
     private List<Transformation> nonlinearTransformations = new ArrayList<>();
+    private NonlinearTransformationsGenerationOrder generationOrder = NonlinearTransformationsGenerationOrder.ORDERED;
 }

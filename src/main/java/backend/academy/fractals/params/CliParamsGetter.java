@@ -30,6 +30,7 @@ public class CliParamsGetter implements ParamsGetter {
                 case "--height" -> this::processHeight;
                 case "--seed" -> this::processSeed;
                 case "--add-transformation" -> this::processAddTransformation;
+                case "--generation-order" -> this::processGenerationOrder;
                 default -> this::processUnknownArgument;
             };
             biConsumer.accept(result, i);
@@ -82,6 +83,17 @@ public class CliParamsGetter implements ParamsGetter {
         params.nonlinearTransformations().add(value);
     }
 
+    private void processGenerationOrder(Params params, int index) {
+        NonlinearTransformationsGenerationOrder value = parseGenerationOrder(args[index + 1]);
+        if (value == null) {
+            params.isSuccess(false);
+            params.message(MessageFormat.format("Argument \"{0}\" should be \"ordered\"|\"random\", "
+                + "{1} was passed", args[index], args[index + 1]));
+            return;
+        }
+        params.generationOrder(value);
+    }
+
     private void processIntegerParam(Params params, Function<Integer, Params> field, int index) {
         Integer value = parseInteger(args[index + 1]);
         if (value == null) {
@@ -109,6 +121,14 @@ public class CliParamsGetter implements ParamsGetter {
             case "polar" -> new PolarTransformation();
             case "sinus" -> new SinusTransformation();
             case "sphere" -> new SphereTransformation();
+            default -> null;
+        };
+    }
+
+    private NonlinearTransformationsGenerationOrder parseGenerationOrder(String s) {
+        return switch (s) {
+            case "ordered" -> NonlinearTransformationsGenerationOrder.ORDERED;
+            case "random" -> NonlinearTransformationsGenerationOrder.RANDOM;
             default -> null;
         };
     }
