@@ -77,7 +77,15 @@ public class CliParamsGetter implements ParamsGetter {
     }
 
     private void processSeed(Params params, int index) {
-        processIntegerParam(params, params::seed, index);
+        Long value = parseLong(args[index + 1]);
+        if (value == null) {
+            params.isSuccess(false);
+            params.message(MessageFormat.format("Argument \"{0}\" should be long integer, \"{1}\" was passed",
+                args[index], args[index + 1]));
+            return;
+        }
+
+        params.seed(value);
     }
 
     private void processAddTransformation(Params params, int index) {
@@ -114,9 +122,22 @@ public class CliParamsGetter implements ParamsGetter {
             params.message(MessageFormat.format("Argument \"{0}\" should be integer, \"{1}\" was passed",
                 args[index], args[index + 1]));
             return;
+        } else if (value < 1) {
+            params.isSuccess(false);
+            params.message(MessageFormat.format("Argument \"{0}\" should be integer greater than " +
+                "or equal to 1, {1} was passed", args[index], args[index + 1]));
+            return;
         }
 
         field.apply(value);
+    }
+
+    private Long parseLong(String s) {
+        try {
+            return Long.parseLong(s);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private Integer parseInteger(String s) {

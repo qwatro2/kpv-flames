@@ -9,7 +9,7 @@ public class Params {
     private boolean isSuccess = true;
     private String message = "Params got successfully";
 
-    private Integer seed = null;
+    private Long seed = null;
     private NumbersParams numbersParams = new NumbersParams();
     private SizeParams sizeParams = new SizeParams();
     private TransformationsParams transformationsParams = new TransformationsParams();
