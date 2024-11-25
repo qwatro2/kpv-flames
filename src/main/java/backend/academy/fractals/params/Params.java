@@ -14,4 +14,5 @@ public class Params {
     private SizeParams sizeParams = new SizeParams();
     private TransformationsParams transformationsParams = new TransformationsParams();
     private SaveParams saveParams = new SaveParams();
+    private Integer numberOfThreads = null;
 }

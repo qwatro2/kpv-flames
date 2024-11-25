@@ -36,6 +36,7 @@ public class CliParamsGetter implements ParamsGetter {
                 case "--n-symmetries" -> this::processNumberOfSymmetries;
                 case "--path" -> this::processPath;
                 case "--format" -> this::processFormat;
+                case "--n-threads" -> this::processNumberOfThreads;
                 default -> this::processUnknownArgument;
             };
             biConsumer.accept(result, i);
@@ -138,6 +139,10 @@ public class CliParamsGetter implements ParamsGetter {
             return;
         }
         params.saveParams().format(value);
+    }
+
+    private void processNumberOfThreads(Params params, int index) {
+        processIntegerParam(params, params::numberOfThreads, index);
     }
 
     private <T> void processIntegerParam(Params params, Function<Integer, T> field, int index) {
