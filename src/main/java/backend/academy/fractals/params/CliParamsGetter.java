@@ -6,6 +6,8 @@ import backend.academy.fractals.transformations.PolarTransformation;
 import backend.academy.fractals.transformations.SinusTransformation;
 import backend.academy.fractals.transformations.SphereTransformation;
 import backend.academy.fractals.transformations.Transformation;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -32,6 +34,8 @@ public class CliParamsGetter implements ParamsGetter {
                 case "--add-transformation" -> this::processAddTransformation;
                 case "--generation-order" -> this::processGenerationOrder;
                 case "--n-symmetries" -> this::processNumberOfSymmetries;
+                case "--path" -> this::processPath;
+                case "--format" -> this::processFormat;
                 default -> this::processUnknownArgument;
             };
             biConsumer.accept(result, i);
@@ -115,6 +119,27 @@ public class CliParamsGetter implements ParamsGetter {
         processIntegerParam(params, n -> params.numbersParams().numberOfSymmetries(n), index);
     }
 
+    private void processPath(Params params, int index) {
+        Path value = parsePath(args[index + 1]);
+        if (value == null) {
+            params.isSuccess(false);
+            params.message(MessageFormat.format("Invalid path \"{0}\"", args[index + 1]));
+            return;
+        }
+        params.saveParams().path(value);
+    }
+
+    private void processFormat(Params params, int index) {
+        ImageFormat value = parseImageFormat(args[index + 1]);
+        if (value == null) {
+            params.isSuccess(false);
+            params.message(MessageFormat.format("Argument \"{0}\" should be \"png\"|\"jpeg\"|\"bmp\", "
+                + "{1} was passed", args[index], args[index + 1]));
+            return;
+        }
+        params.saveParams().format(value);
+    }
+
     private <T> void processIntegerParam(Params params, Function<Integer, T> field, int index) {
         Integer value = parseInteger(args[index + 1]);
         if (value == null) {
@@ -165,5 +190,22 @@ public class CliParamsGetter implements ParamsGetter {
             case "random" -> NonlinearTransformationsGenerationOrder.RANDOM;
             default -> null;
         };
+    }
+
+    private ImageFormat parseImageFormat(String s) {
+        return switch (s.toLowerCase()) {
+            case "png" -> ImageFormat.PNG;
+            case "jpeg" -> ImageFormat.JPEG;
+            case "bmp" -> ImageFormat.BMP;
+            default -> null;
+        };
+    }
+
+    private Path parsePath(String s) {
+        try {
+            return Path.of(s);
+        } catch (InvalidPathException e) {
+            return null;
+        }
     }
 }

@@ -13,4 +13,5 @@ public class Params {
     private NumbersParams numbersParams = new NumbersParams();
     private SizeParams sizeParams = new SizeParams();
     private TransformationsParams transformationsParams = new TransformationsParams();
+    private SaveParams saveParams = new SaveParams();
 }
