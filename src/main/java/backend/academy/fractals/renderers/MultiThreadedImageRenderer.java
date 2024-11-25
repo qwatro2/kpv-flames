@@ -18,12 +18,11 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
         Generator<LinearTransformation> linearTransformationGenerator,
         Generator<Color> colorGenerator,
         PointGeneratorFactory pointGeneratorFactory,
-        NonlinearTransformationGeneratorFactory nonlinearTransformationGeneratorFactory,
-        int numberOfThreads
+        NonlinearTransformationGeneratorFactory nonlinearTransformationGeneratorFactory
     ) {
         super(params, linearTransformationGenerator, colorGenerator, pointGeneratorFactory,
             nonlinearTransformationGeneratorFactory);
-        this.numberOfThreads = numberOfThreads;
+        this.numberOfThreads = params.numberOfThreads();
         this.threads = new Thread[this.numberOfThreads];
         this.numberOfSamples /= this.numberOfThreads;
     }
