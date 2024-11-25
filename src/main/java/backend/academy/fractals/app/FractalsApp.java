@@ -14,16 +14,24 @@ import backend.academy.fractals.renderers.MultiThreadedImageRenderer;
 import backend.academy.fractals.renderers.SingleThreadedImageRenderer;
 import backend.academy.fractals.savers.FileImageSaver;
 import backend.academy.fractals.savers.ImageSaver;
+import backend.academy.fractals.viewers.ParamsViewer;
+import backend.academy.fractals.viewers.Viewer;
 import java.io.PrintStream;
 import java.text.MessageFormat;
 
 public class FractalsApp extends AbstractFractalsApp {
     private final PrintStream okStream;
     private final PrintStream errorStream;
+    private final Viewer<Params> paramsViewer;
 
     public FractalsApp(PrintStream okStream, PrintStream errorStream) {
+        this(okStream, errorStream, new ParamsViewer());
+    }
+
+    public FractalsApp(PrintStream okStream, PrintStream errorStream, Viewer<Params> paramsViewer) {
         this.okStream = okStream;
         this.errorStream = errorStream;
+        this.paramsViewer = paramsViewer;
     }
 
     @Override
@@ -38,6 +46,7 @@ public class FractalsApp extends AbstractFractalsApp {
             return false;
         }
         okStream.println(params.message());
+        okStream.println(paramsViewer.view(params));
         return true;
     }
 
