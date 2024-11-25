@@ -22,8 +22,16 @@ public class FileImageSaver implements ImageSaver {
     private final static int BLUE = 0xff;
     private final static int BIT_LEN = 24;
 
+    private final Path path;
+    private final ImageFormat format;
+
+    public FileImageSaver(Path path, ImageFormat format) {
+        this.path = path;
+        this.format = format;
+    }
+
     @Override
-    public boolean save(PixelImage image, Path path, ImageFormat format) {
+    public boolean save(PixelImage image) {
         int[] rgbValues = pixelImageToIntArray(image);
         DataBuffer rgbData = new DataBufferInt(rgbValues, rgbValues.length);
 
