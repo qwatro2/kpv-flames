@@ -23,7 +23,7 @@ public class FileImageSaver implements ImageSaver {
     private final static int BIT_LEN = 24;
 
     @Override
-    public void save(PixelImage image, Path path, ImageFormat format) {
+    public boolean save(PixelImage image, Path path, ImageFormat format) {
         int[] rgbValues = pixelImageToIntArray(image);
         DataBuffer rgbData = new DataBufferInt(rgbValues, rgbValues.length);
 
@@ -35,7 +35,9 @@ public class FileImageSaver implements ImageSaver {
         BufferedImage img = new BufferedImage(colorModel, raster, false, null);
         try {
             ImageIO.write(img, format.name(), path.toFile());
+            return true;
         } catch (IOException e) {
+            return false;
         }
     }
 

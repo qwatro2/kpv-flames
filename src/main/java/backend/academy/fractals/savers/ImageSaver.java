@@ -5,5 +5,5 @@ import backend.academy.fractals.params.ImageFormat;
 import java.nio.file.Path;
 
 public interface ImageSaver {
-    void save(PixelImage image, Path path, ImageFormat format);
+    boolean save(PixelImage image, Path path, ImageFormat format);
 }
