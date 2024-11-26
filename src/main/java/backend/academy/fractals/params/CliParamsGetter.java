@@ -1,6 +1,7 @@
 package backend.academy.fractals.params;
 
 import backend.academy.fractals.transformations.DiskTransformation;
+import backend.academy.fractals.transformations.HandkerchiefTransformation;
 import backend.academy.fractals.transformations.HearthTransformation;
 import backend.academy.fractals.transformations.HorseshoeTransformation;
 import backend.academy.fractals.transformations.PolarTransformation;
@@ -100,7 +101,8 @@ public class CliParamsGetter implements ParamsGetter {
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be \"disk\"|\"hearth\"|\"polar\"|"
-                    + "\"sinus\"|\"sphere\"|\"swirl\"|\"horseshoe\", \"{1}\" was passed",
+                    + "\"sinus\"|\"sphere\"|\"swirl\"|\"horseshoe\"|"
+                    + "\"handkerchief\", \"{1}\" was passed",
                 args[index], args[index + 1]));
             return;
         }
@@ -189,6 +191,7 @@ public class CliParamsGetter implements ParamsGetter {
             case "sphere" -> new SphereTransformation();
             case "swirl" -> new SwirlTransformation();
             case "horseshoe" -> new HorseshoeTransformation();
+            case "handkerchief" -> new HandkerchiefTransformation();
             default -> null;
         };
     }
