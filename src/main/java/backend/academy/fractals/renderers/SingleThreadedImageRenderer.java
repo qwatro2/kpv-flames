@@ -6,29 +6,29 @@ import backend.academy.fractals.factories.NonlinearTransformationGeneratorFactor
 import backend.academy.fractals.factories.PointGeneratorFactory;
 import backend.academy.fractals.generators.Generator;
 import backend.academy.fractals.params.Params;
-import backend.academy.fractals.transformations.LinearTransformation;
+import backend.academy.fractals.transformations.AffineTransformation;
 import java.util.List;
 
 public class SingleThreadedImageRenderer extends AbstractImageRenderer {
     public SingleThreadedImageRenderer(
         Params params,
-        Generator<LinearTransformation> linearTransformationGenerator,
+        Generator<AffineTransformation> affineTransformationGenerator,
         Generator<Color> colorGenerator,
         PointGeneratorFactory pointGeneratorFactory,
         NonlinearTransformationGeneratorFactory nonlinearTransformationGeneratorFactory
     ) {
-        super(params, linearTransformationGenerator, colorGenerator, pointGeneratorFactory,
+        super(params, affineTransformationGenerator, colorGenerator, pointGeneratorFactory,
             nonlinearTransformationGeneratorFactory);
     }
 
     @Override
     protected void processRendering(
         PixelImage canvas,
-        List<LinearTransformation> linearTransformations,
+        List<AffineTransformation> affineTransformations,
         List<Color> colors
     ) {
         for (int num = 0; num < numberOfSamples; ++num) {
-            processSampleIterations(linearTransformations, colors, canvas);
+            processSampleIterations(affineTransformations, colors, canvas);
         }
     }
 

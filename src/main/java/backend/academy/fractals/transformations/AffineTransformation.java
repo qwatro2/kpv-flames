@@ -2,7 +2,7 @@ package backend.academy.fractals.transformations;
 
 import backend.academy.fractals.entities.Point;
 
-public class LinearTransformation implements Transformation {
+public class AffineTransformation implements Transformation {
     private final double a;
     private final double b;
     private final double c;
@@ -10,7 +10,7 @@ public class LinearTransformation implements Transformation {
     private final double e;
     private final double f;
 
-    private LinearTransformation(double a, double b, double c, double d, double e, double f) {
+    private AffineTransformation(double a, double b, double c, double d, double e, double f) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -19,12 +19,12 @@ public class LinearTransformation implements Transformation {
         this.f = f;
     }
 
-    public static LinearTransformation createOrNull(double a, double b, double c, double d, double e, double f) {
+    public static AffineTransformation createOrNull(double a, double b, double c, double d, double e, double f) {
         if (!checkCoefficients(a, b, d, e)) {
             return null;
         }
 
-        return new LinearTransformation(a, b, c, d, e, f);
+        return new AffineTransformation(a, b, c, d, e, f);
     }
 
     @Override

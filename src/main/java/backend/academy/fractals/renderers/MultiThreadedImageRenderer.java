@@ -6,7 +6,7 @@ import backend.academy.fractals.factories.NonlinearTransformationGeneratorFactor
 import backend.academy.fractals.factories.PointGeneratorFactory;
 import backend.academy.fractals.generators.Generator;
 import backend.academy.fractals.params.Params;
-import backend.academy.fractals.transformations.LinearTransformation;
+import backend.academy.fractals.transformations.AffineTransformation;
 import java.util.List;
 
 public class MultiThreadedImageRenderer extends AbstractImageRenderer {
@@ -16,12 +16,12 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
 
     public MultiThreadedImageRenderer(
         Params params,
-        Generator<LinearTransformation> linearTransformationGenerator,
+        Generator<AffineTransformation> affineTransformationGenerator,
         Generator<Color> colorGenerator,
         PointGeneratorFactory pointGeneratorFactory,
         NonlinearTransformationGeneratorFactory nonlinearTransformationGeneratorFactory
     ) {
-        super(params, linearTransformationGenerator, colorGenerator, pointGeneratorFactory,
+        super(params, affineTransformationGenerator, colorGenerator, pointGeneratorFactory,
             nonlinearTransformationGeneratorFactory);
         this.numberOfThreads = this.numberOfSamples > params.numberOfThreads()
             ? params.numberOfThreads()
@@ -39,12 +39,12 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
     @Override
     protected void processRendering(
         PixelImage canvas,
-        List<LinearTransformation> linearTransformations,
+        List<AffineTransformation> affineTransformations,
         List<Color> colors
     ) {
         for (int i = 0; i < numberOfThreads; ++i) {
             threads[i] = new Thread(
-                new OneThreadRunnable(canvas, linearTransformations, colors, numberOfSamplesPerThread[i])
+                new OneThreadRunnable(canvas, affineTransformations, colors, numberOfSamplesPerThread[i])
             );
             threads[i].start();
         }
@@ -67,18 +67,18 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
 
     private class OneThreadRunnable implements Runnable {
         private final PixelImage canvas;
-        private final List<LinearTransformation> linearTransformations;
+        private final List<AffineTransformation> affineTransformations;
         private final List<Color> colors;
         private final int numberOfSamplesThisThreadProcess;
 
         private OneThreadRunnable(
             PixelImage canvas,
-            List<LinearTransformation> linearTransformations,
+            List<AffineTransformation> affineTransformations,
             List<Color> colors,
             int numberOfSamplesThisThreadProcess
         ) {
             this.canvas = canvas;
-            this.linearTransformations = linearTransformations;
+            this.affineTransformations = affineTransformations;
             this.colors = colors;
             this.numberOfSamplesThisThreadProcess = numberOfSamplesThisThreadProcess;
         }
@@ -86,7 +86,7 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
         @Override
         public void run() {
             for (int num = 0; num < numberOfSamplesThisThreadProcess; ++num) {
-                processSampleIterations(linearTransformations, colors, canvas);
+                processSampleIterations(affineTransformations, colors, canvas);
             }
         }
     }

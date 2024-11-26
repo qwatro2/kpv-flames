@@ -5,7 +5,7 @@ import backend.academy.fractals.correctors.ImageCorrector;
 import backend.academy.fractals.factories.ConcreteNonlinearTransformationGeneratorFactory;
 import backend.academy.fractals.factories.ConcretePointGeneratorFactory;
 import backend.academy.fractals.generators.ColorGenerator;
-import backend.academy.fractals.generators.LinearTransformationGenerator;
+import backend.academy.fractals.generators.AffineTransformationGenerator;
 import backend.academy.fractals.params.CliParamsGetter;
 import backend.academy.fractals.params.Params;
 import backend.academy.fractals.params.ParamsGetter;
@@ -55,7 +55,7 @@ public class FractalsApp extends AbstractFractalsApp {
         if (params.numberOfThreads() == null) {
             return new SingleThreadedImageRenderer(
                 params,
-                new LinearTransformationGenerator(-1.0, 1.0),
+                new AffineTransformationGenerator(-1.0, 1.0),
                 new ColorGenerator(),
                 new ConcretePointGeneratorFactory(),
                 new ConcreteNonlinearTransformationGeneratorFactory()
@@ -64,7 +64,7 @@ public class FractalsApp extends AbstractFractalsApp {
 
         return new MultiThreadedImageRenderer(
             params,
-            new LinearTransformationGenerator(-1.0, 1.0),
+            new AffineTransformationGenerator(-1.0, 1.0),
             new ColorGenerator(),
             new ConcretePointGeneratorFactory(),
             new ConcreteNonlinearTransformationGeneratorFactory()

@@ -1,29 +1,29 @@
 package backend.academy.fractals.generators;
 
-import backend.academy.fractals.transformations.LinearTransformation;
+import backend.academy.fractals.transformations.AffineTransformation;
 import java.util.Random;
 
-public class LinearTransformationGenerator implements Generator<LinearTransformation> {
+public class AffineTransformationGenerator implements Generator<AffineTransformation> {
     private Random random;
     private final double minValue;
     private final double maxValue;
 
-    public LinearTransformationGenerator(double minValue, double maxValue) {
+    public AffineTransformationGenerator(double minValue, double maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
 
     @Override
-    public Generator<LinearTransformation> setRandom(Random random) {
+    public Generator<AffineTransformation> setRandom(Random random) {
         this.random = random;
         return this;
     }
 
     @Override
-    public LinearTransformation next() {
-        LinearTransformation transformation = null;
+    public AffineTransformation next() {
+        AffineTransformation transformation = null;
         while (transformation == null) {
-            transformation = LinearTransformation.createOrNull(
+            transformation = AffineTransformation.createOrNull(
                 nextDouble(),
                 nextDouble(),
                 nextDouble(),

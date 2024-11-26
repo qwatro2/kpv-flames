@@ -9,7 +9,7 @@ import backend.academy.fractals.factories.NonlinearTransformationGeneratorFactor
 import backend.academy.fractals.factories.PointGeneratorFactory;
 import backend.academy.fractals.generators.Generator;
 import backend.academy.fractals.params.Params;
-import backend.academy.fractals.transformations.LinearTransformation;
+import backend.academy.fractals.transformations.AffineTransformation;
 import backend.academy.fractals.transformations.Transformation;
 import java.util.List;
 import java.util.Random;
@@ -28,7 +28,7 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
     private final double numberOfSymmetries;
 
     private final Random random;
-    private final Generator<LinearTransformation> linearTransformationGenerator;
+    private final Generator<AffineTransformation> affineTransformationGenerator;
     private final Generator<Transformation> nonlinearTransformationGenerator;
     private final Generator<Color> colorGenerator;
     private final Generator<Point> pointGenerator;
@@ -40,7 +40,7 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
 
     public AbstractImageRenderer(
         Params params,
-        Generator<LinearTransformation> linearTransformationGenerator,
+        Generator<AffineTransformation> affineTransformationGenerator,
         Generator<Color> colorGenerator,
         PointGeneratorFactory pointGeneratorFactory,
         NonlinearTransformationGeneratorFactory nonlinearTransformationGeneratorFactory
@@ -58,7 +58,7 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
             this.random.setSeed(params.seed());
         }
 
-        this.linearTransformationGenerator = linearTransformationGenerator.setRandom(this.random);
+        this.affineTransformationGenerator = affineTransformationGenerator.setRandom(this.random);
         this.colorGenerator = colorGenerator.setRandom(this.random);
 
         this.nonlinearTransformationGenerator =
@@ -79,25 +79,25 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
     public PixelImage render() {
         PixelImage canvas = new PixelImage(width, height);
 
-        List<LinearTransformation> linearTransformations =
-            generateList(linearTransformationGenerator, numberOfTransformations);
+        List<AffineTransformation> affineTransformations =
+            generateList(affineTransformationGenerator, numberOfTransformations);
         List<Color> colors = generateList(colorGenerator, numberOfTransformations);
 
-        processRendering(canvas, linearTransformations, colors);
+        processRendering(canvas, affineTransformations, colors);
 
         return canvas;
     }
 
     protected abstract void processRendering(
         PixelImage canvas,
-        List<LinearTransformation> linearTransformations,
+        List<AffineTransformation> affineTransformations,
         List<Color> colors
     );
 
     protected abstract void processCorrectRowColProxy(PixelImage canvas, int row, int col, Color color);
 
     protected final void processSampleIterations(
-        List<LinearTransformation> linearTransformations,
+        List<AffineTransformation> affineTransformations,
         List<Color> colors,
         PixelImage canvas
     ) {
@@ -105,23 +105,23 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
 
         for (int iter = -NUMBER_OF_SKIPPED_ITERATIONS; iter < numberOfIterationsPerSample; ++iter) {
             int randomIndex = random.nextInt(numberOfTransformations);
-            Transformation linearTransformation =
-                linearTransformations.get(randomIndex);
+            Transformation affineTransformation =
+                affineTransformations.get(randomIndex);
             Transformation nonlinearTransformation =
                 nonlinearTransformationGenerator.next();
             Color color = colors.get(randomIndex);
 
             point =
-                processOneSampleIterations(iter, linearTransformation, nonlinearTransformation, point, canvas, color);
+                processOneSampleIterations(iter, affineTransformation, nonlinearTransformation, point, canvas, color);
         }
     }
 
     private Point processOneSampleIterations(
-        int iter, Transformation linearTransformation,
+        int iter, Transformation affineTransformation,
         Transformation nonlinearTransformation, Point point,
         PixelImage canvas, Color color
     ) {
-        point = linearTransformation.andThen(nonlinearTransformation).apply(point);
+        point = affineTransformation.andThen(nonlinearTransformation).apply(point);
 
         if (iter >= 0) {
             double theta2 = 0.0;
