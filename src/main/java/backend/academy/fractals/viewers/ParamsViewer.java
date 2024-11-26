@@ -2,6 +2,7 @@ package backend.academy.fractals.viewers;
 
 import backend.academy.fractals.params.Params;
 import backend.academy.fractals.transformations.DiskTransformation;
+import backend.academy.fractals.transformations.EyefishTransformation;
 import backend.academy.fractals.transformations.HandkerchiefTransformation;
 import backend.academy.fractals.transformations.HearthTransformation;
 import backend.academy.fractals.transformations.HorseshoeTransformation;
@@ -152,6 +153,7 @@ public class ParamsViewer implements Viewer<Params> {
             case SwirlTransformation t -> "swirl";
             case HorseshoeTransformation t -> "horseshoe";
             case HandkerchiefTransformation t -> "handkerchief";
+            case EyefishTransformation t -> "eyefish";
             default -> "unknown";
         };
     }
