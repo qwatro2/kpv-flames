@@ -6,6 +6,7 @@ import backend.academy.fractals.transformations.HearthTransformation;
 import backend.academy.fractals.transformations.PolarTransformation;
 import backend.academy.fractals.transformations.SinusTransformation;
 import backend.academy.fractals.transformations.SphereTransformation;
+import backend.academy.fractals.transformations.SwirlTransformation;
 import backend.academy.fractals.transformations.Transformation;
 import org.apache.commons.lang3.StringUtils;
 import java.util.Comparator;
@@ -146,6 +147,7 @@ public class ParamsViewer implements Viewer<Params> {
             case PolarTransformation t -> "polar";
             case SinusTransformation t -> "sinus";
             case SphereTransformation t -> "sphere";
+            case SwirlTransformation t -> "swirl";
             default -> "unknown";
         };
     }

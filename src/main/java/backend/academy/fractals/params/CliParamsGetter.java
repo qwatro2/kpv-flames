@@ -5,6 +5,7 @@ import backend.academy.fractals.transformations.HearthTransformation;
 import backend.academy.fractals.transformations.PolarTransformation;
 import backend.academy.fractals.transformations.SinusTransformation;
 import backend.academy.fractals.transformations.SphereTransformation;
+import backend.academy.fractals.transformations.SwirlTransformation;
 import backend.academy.fractals.transformations.Transformation;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -98,7 +99,7 @@ public class CliParamsGetter implements ParamsGetter {
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be \"disk\"|\"hearth\"|\"polar\"|"
-                    + "\"sinus\"|\"sphere\", \"{1}\" was passed",
+                    + "\"sinus\"|\"sphere\"|\"swirl\", \"{1}\" was passed",
                 args[index], args[index + 1]));
             return;
         }
@@ -185,6 +186,7 @@ public class CliParamsGetter implements ParamsGetter {
             case "polar" -> new PolarTransformation();
             case "sinus" -> new SinusTransformation();
             case "sphere" -> new SphereTransformation();
+            case "swirl" -> new SwirlTransformation();
             default -> null;
         };
     }
