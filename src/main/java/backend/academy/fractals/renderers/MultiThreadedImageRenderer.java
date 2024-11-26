@@ -12,6 +12,7 @@ import java.util.List;
 public class MultiThreadedImageRenderer extends AbstractImageRenderer {
     private final int numberOfThreads;
     private final Thread[] threads;
+    private final int[] numberOfSamplesPerThread;
 
     public MultiThreadedImageRenderer(
         Params params,
@@ -22,9 +23,17 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
     ) {
         super(params, linearTransformationGenerator, colorGenerator, pointGeneratorFactory,
             nonlinearTransformationGeneratorFactory);
-        this.numberOfThreads = params.numberOfThreads();
+        this.numberOfThreads = this.numberOfSamples > params.numberOfThreads()
+            ? params.numberOfThreads()
+            : this.numberOfSamples;
         this.threads = new Thread[this.numberOfThreads];
-        this.numberOfSamples /= this.numberOfThreads;
+        this.numberOfSamplesPerThread = new int[this.numberOfThreads];
+        for (int i = 0; i < this.numberOfThreads - 1; ++i) {
+            this.numberOfSamplesPerThread[i] = this.numberOfSamples / (this.numberOfThreads - 1);
+        }
+        this.numberOfSamplesPerThread[this.numberOfThreads - 1] = this.numberOfThreads > 1
+            ? this.numberOfSamples % (this.numberOfThreads - 1)
+            : this.numberOfSamples;
     }
 
     @Override
@@ -34,7 +43,9 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
         List<Color> colors
     ) {
         for (int i = 0; i < numberOfThreads; ++i) {
-            threads[i] = new Thread(new OneThreadRunnable(canvas, linearTransformations, colors));
+            threads[i] = new Thread(
+                new OneThreadRunnable(canvas, linearTransformations, colors, numberOfSamplesPerThread[i])
+            );
             threads[i].start();
         }
 
@@ -58,20 +69,23 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
         private final PixelImage canvas;
         private final List<LinearTransformation> linearTransformations;
         private final List<Color> colors;
+        private final int numberOfSamplesThisThreadProcess;
 
         private OneThreadRunnable(
             PixelImage canvas,
             List<LinearTransformation> linearTransformations,
-            List<Color> colors
+            List<Color> colors,
+            int numberOfSamplesThisThreadProcess
         ) {
             this.canvas = canvas;
             this.linearTransformations = linearTransformations;
             this.colors = colors;
+            this.numberOfSamplesThisThreadProcess = numberOfSamplesThisThreadProcess;
         }
 
         @Override
         public void run() {
-            for (int num = 0; num < numberOfSamples; ++num) {
+            for (int num = 0; num < numberOfSamplesThisThreadProcess; ++num) {
                 processSampleIterations(linearTransformations, colors, canvas);
             }
         }
