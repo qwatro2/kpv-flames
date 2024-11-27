@@ -17,6 +17,7 @@ public class ConcretePointGeneratorFactory implements PointGeneratorFactory {
             yMin = -yMax;
         } else if (width < height) {
             xMax = ((double) width) / height;
+            xMin = -xMax;
         }
 
         Generator<Point> generator = new PointGenerator(xMin, xMax, yMin, yMax);
