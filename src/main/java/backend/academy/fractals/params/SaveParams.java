@@ -1,8 +1,8 @@
 package backend.academy.fractals.params;
 
+import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
-import java.nio.file.Path;
 
 @Getter
 @Setter
