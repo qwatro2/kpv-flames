@@ -71,7 +71,7 @@ public class MultiThreadedImageRenderer extends AbstractImageRenderer {
         private final List<Color> colors;
         private final int numberOfSamplesThisThreadProcess;
 
-        private OneThreadRunnable(
+        protected OneThreadRunnable(
             PixelImage canvas,
             List<AffineTransformation> affineTransformations,
             List<Color> colors,
