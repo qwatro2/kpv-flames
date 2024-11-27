@@ -240,9 +240,9 @@ public class CliParamsGetter implements ParamsGetter {
         return """
             Options:
             --n-samples N             : integer > 0 : number of starting points                        : default 1000
-            --n-iterations N          : integer > 0 : number of iterations per sample                  : default 10000
+            --n-iterations N          : integer > 0 : number of iterations per sample                  : default 100000
             --n-symmetries N          : integer > 0 : number of symmetries                             : default 1 (no symmetries)
-            --n-transformations N     : integer > 0 : number of affine transformations                 : default 100
+            --n-transformations N     : integer > 0 : number of affine transformations                 : default 10
             --n-threads N             : integer > 0 : number of threads                                : default null (no threading)
             --width W                 : integer > 0 : width of image in pixels                         : default 900
             --height H                : integer > 0 : height of image in pixels                        : default 900
