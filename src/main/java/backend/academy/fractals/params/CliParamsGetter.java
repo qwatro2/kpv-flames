@@ -18,6 +18,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class CliParamsGetter implements ParamsGetter {
+    private static final String ONE_WAS_PASSED = "{1} was passed";
+
     private final String[] args;
 
     public CliParamsGetter(String[] args) {
@@ -120,7 +122,7 @@ public class CliParamsGetter implements ParamsGetter {
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be \"ordered\"|\"random\", "
-                + "{1} was passed", args[index], args[index + 1]));
+                + ONE_WAS_PASSED, args[index], args[index + 1]));
             return;
         }
         params.transformationsParams().generationOrder(value);
@@ -145,7 +147,7 @@ public class CliParamsGetter implements ParamsGetter {
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be \"png\"|\"jpeg\"|\"bmp\", "
-                + "{1} was passed", args[index], args[index + 1]));
+                + ONE_WAS_PASSED, args[index], args[index + 1]));
             return;
         }
         params.saveParams().format(value);
@@ -161,15 +163,13 @@ public class CliParamsGetter implements ParamsGetter {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be integer, \"{1}\" was passed",
                 args[index], args[index + 1]));
-            return;
         } else if (value < 1) {
             params.isSuccess(false);
-            params.message(MessageFormat.format("Argument \"{0}\" should be integer greater than " +
-                "or equal to 1, {1} was passed", args[index], args[index + 1]));
-            return;
+            params.message(MessageFormat.format("Argument \"{0}\" should be integer greater than "
+                + "or equal to 1, " + ONE_WAS_PASSED, args[index], args[index + 1]));
+        } else {
+            field.apply(value);
         }
-
-        field.apply(value);
     }
 
     private Long parseLong(String s) {
