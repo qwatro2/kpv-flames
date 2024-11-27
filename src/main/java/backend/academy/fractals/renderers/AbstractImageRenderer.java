@@ -121,15 +121,14 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
         Transformation nonlinearTransformation, Point point,
         PixelImage canvas, Color color
     ) {
-        Point pointCopy = new Point(point.x(), point.y());
-        point = affineTransformation.andThen(nonlinearTransformation).apply(pointCopy);
+        Point newPoint = affineTransformation.andThen(nonlinearTransformation).apply(point);
 
         if (iter >= 0) {
             double theta2 = 0.0;
             for (int s = 0; s < numberOfSymmetries; ++s) {
                 theta2 += 2 * Math.PI / numberOfSymmetries;
-                double xRot = point.x() * Math.cos(theta2) - point.y() * Math.sin(theta2);
-                double yRot = point.x() * Math.sin(theta2) + point.y() * Math.cos(theta2);
+                double xRot = newPoint.x() * Math.cos(theta2) - newPoint.y() * Math.sin(theta2);
+                double yRot = newPoint.x() * Math.sin(theta2) + newPoint.y() * Math.cos(theta2);
                 Point pointRot = new Point(xRot, yRot);
                 if (isCorrectPoint(pointRot)) {
                     int col = width - (int) (((xMax - pointRot.x()) / (xMax - xMin)) * width);
@@ -142,7 +141,7 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
             }
         }
 
-        return point;
+        return newPoint;
     }
 
     protected final void processCorrectRowCol(PixelImage canvas, int row, int col, Color color) {
