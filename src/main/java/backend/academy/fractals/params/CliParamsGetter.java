@@ -13,6 +13,7 @@ import backend.academy.fractals.transformations.Transformation;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -26,6 +27,10 @@ public class CliParamsGetter implements ParamsGetter {
     @Override
     public Params get() {
         Params result = new Params();
+
+        if (!processHelp(args, result)) {
+            return result;
+        }
 
         for (int i = 0; i < args.length - 1; i += 2) {
             BiConsumer<Params, Integer> biConsumer = switch (args[i]) {
@@ -221,5 +226,34 @@ public class CliParamsGetter implements ParamsGetter {
         } catch (InvalidPathException e) {
             return null;
         }
+    }
+
+    private boolean processHelp(String[] args, Params params) {
+        if (args.length > 0 && (Objects.equals(args[0], "--help") || Objects.equals(args[0], "-h"))) {
+            params.isSuccess(false);
+            params.message(getHelpString());
+        }
+        return params.isSuccess();
+    }
+
+    private String getHelpString() {
+        return """
+            Options:
+            --n-samples N             : integer > 0 : number of starting points                        : default 1000
+            --n-iterations N          : integer > 0 : number of iterations per sample                  : default 10000
+            --n-symmetries N          : integer > 0 : number of symmetries                             : default 1 (no symmetries)
+            --n-transformations N     : integer > 0 : number of affine transformations                 : default 100
+            --n-threads N             : integer > 0 : number of threads                                : default null (no threading)
+            --width W                 : integer > 0 : width of image in pixels                         : default 900
+            --height H                : integer > 0 : height of image in pixels                        : default 900
+            --seed N                  : long        : seed for random generator                        : default null (no seed)
+            --path PATH               : string      : path to save image                               : default "./result.png"
+            --format FORMAT           : string      : format to save image : one of "png"|"jpeg"|"bmp" : default "png"
+            --add-transformation NAME : string      : add nonlinear transformation
+                                        one of "disk"|"hearth"|"polar"|"sinus"|"sphere"|"swirl"|"horseshoe"|"handkerchief"|"eyefish"
+                                        (can be used multiple times)
+            --generation-order ORDER  : string      : use nonlinear transformation in adding order or in random order
+                                        one of "ordered"|"random"                                      : default "ordered"
+            """;
     }
 }
