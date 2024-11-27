@@ -239,21 +239,34 @@ public class CliParamsGetter implements ParamsGetter {
     private String getHelpString() {
         return """
             Options:
-            --n-samples N             : integer > 0 : number of starting points                        : default 1000
-            --n-iterations N          : integer > 0 : number of iterations per sample                  : default 100000
-            --n-symmetries N          : integer > 0 : number of symmetries                             : default 1 (no symmetries)
-            --n-transformations N     : integer > 0 : number of affine transformations                 : default 10
-            --n-threads N             : integer > 0 : number of threads                                : default null (no threading)
-            --width W                 : integer > 0 : width of image in pixels                         : default 900
-            --height H                : integer > 0 : height of image in pixels                        : default 900
-            --seed N                  : long        : seed for random generator                        : default null (no seed)
-            --path PATH               : string      : path to save image                               : default "./result.png"
-            --format FORMAT           : string      : format to save image : one of "png"|"jpeg"|"bmp" : default "png"
+            --n-samples N             : integer > 0 : number of starting points                        \
+            : default 1000
+            --n-iterations N          : integer > 0 : number of iterations per sample                  \
+            : default 100000
+            --n-symmetries N          : integer > 0 : number of symmetries                             \
+            : default 1 (no symmetries)
+            --n-transformations N     : integer > 0 : number of affine transformations                 \
+            : default 10
+            --n-threads N             : integer > 0 : number of threads                                \
+            : default null (no threading)
+            --width W                 : integer > 0 : width of image in pixels                         \
+            : default 900
+            --height H                : integer > 0 : height of image in pixels                        \
+            : default 900
+            --seed N                  : long        : seed for random generator                        \
+            : default null (no seed)
+            --path PATH               : string      : path to save image                               \
+            : default "./result.png"
+            --format FORMAT           : string      : format to save image : one of "png"|"jpeg"|"bmp" \
+            : default "png"
             --add-transformation NAME : string      : add nonlinear transformation
-                                        one of "disk"|"hearth"|"polar"|"sinus"|"sphere"|"swirl"|"horseshoe"|"handkerchief"|"eyefish"
+                                        one of "disk"|"hearth"|"polar"|"sinus"|"sphere"|"swirl"|\
+            "horseshoe"|"handkerchief"|"eyefish"
                                         (can be used multiple times)
-            --generation-order ORDER  : string      : use nonlinear transformation in adding order or in random order
-                                        one of "ordered"|"random"                                      : default "ordered"
+            --generation-order ORDER  : string      \
+            : use nonlinear transformation in adding order or in random order
+                                        one of "ordered"|"random"\
+                                                  : default "ordered"
             """;
     }
 }
