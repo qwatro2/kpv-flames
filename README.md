@@ -1,137 +1,142 @@
-# Шаблон Java-проекта для домашних заданий
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/central-university-dev/backend_academy_2024_project_3-java-qwatro2/blob/master/README.md)
+[![pt-br](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/central-university-dev/backend_academy_2024_project_3-java-qwatro2/blob/master/README.ru.md)
 
-Шаблон для домашних заданий [Академии Бэкенда 2024][course-url].
+# Fractal Flame
+<img src=images/title.png width="400" height="400"  alt="title-image"/>
 
-Цель данного репозитория – познакомить вас с процессом разработки приложений на
-Java с использованием наиболее распространенных практик, инструментов и
-библиотек.
+## How to use?
+You can run it with the `--help` flag and see the help
+### Parameters
+|       Parameter        |        Type        |                    Description                    |     Default value      |
+|:----------------------:|:------------------:|:-------------------------------------------------:|:----------------------:|
+|     `--n-samples`      |      int > 0       |                 number of samples                 |          1000          |
+|    `--n-iterations`    |      int > 0       |          number of iterations per sample          |         100000         |
+|    `--n-symmetries`    |      int > 0       |           number of circular symmetries           | 1 (without symmetries) |
+| `--n-transformations`  |      int > 0       |         number of affine transformations          |           10           |
+|     `--n-threads`      |      int > 0       |     number of threads in multithreading mode      |  null (no threading)   |
+|       `--width`        |      int > 0       |             width of resulting image              |          900           |
+|       `--height`       |      int > 0       |             height of resulting image             |          900           |
+|        `--seed`        |        long        |             seed of random generation             |     null (no seed)     |
+|        `--path`        |       string       |            path to file to save image             |      ./result.png      |
+|       `--format`       | png \| jpeg \| bmp |               format of saved image               |          png           |
+|  `--generation-order`  | ordered \| random  | order of application of nonlinear transformations |        ordered         |
+| `--add-transformation` |       string       |    adding nonlinear transformation to the list    |           -            |
 
-## Структура проекта
+### `--add-transformation`
++ takes one of the strings: `disk`, `eyefish`, `handkerchief`, `hearth`, `horseshoe`, `polar`, `sinus`, `sphere`, `swirl`
++ adds the specified transformation to the list of nonlinear transformations
++ can be used any number of times, but not less than one
 
-Это типовой Java-проект, который собирается с помощью инструмента автоматической
-сборки проектов [Apache Maven](https://maven.apache.org/).
-
-Проект состоит из следующих директорий и файлов:
-
-- [pom.xml](./pom.xml) – дескриптор сборки, используемый maven, или Project
-  Object Model. В нем описаны зависимости проекта и шаги по его сборке
-- [src/](./src) – директория, которая содержит исходный код приложения и его
-  тесты:
-  - [src/main/](./src/main) – здесь находится код вашего приложения
-  - [src/test/](./src/test) – здесь находятся тесты вашего приложения
-- [mvnw](./mvnw) и [mvnw.cmd](./mvnw.cmd) – скрипты maven wrapper для Unix и
-  Windows, которые позволяют запускать команды maven без локальной установки
-- [checkstyle.xml](checkstyle.xml),
-  [checkstyle-suppression.xml](checkstyle-suppression.xml), [pmd.xml](pmd.xml) и
-  [spotbugs-excludes.xml](spotbugs-excludes.xml) – в проекте используются
-  [линтеры](https://en.wikipedia.org/wiki/Lint_%28software%29) для контроля
-  качества кода. Указанные файлы содержат правила для используемых линтеров
-- [.mvn/](./.mvn) – служебная директория maven, содержащая конфигурационные
-  параметры сборщика
-- [lombok.config](lombok.config) – конфигурационный файл
-  [Lombok](https://projectlombok.org/), библиотеки помогающей избежать рутинного
-  написания шаблонного кода
-- [.editorconfig](.editorconfig) – файл с описанием настроек форматирования кода
-- [.github/workflows/build.yml](.github/workflows/build.yml) – файл с описанием
-  шагов сборки проекта в среде Github
-- [.gitattributes](.gitattributes), [.gitignore](.gitignore) – служебные файлы
-  для git, с описанием того, как обрабатывать различные файлы, и какие из них
-  игнорировать
-
-## Начало работы
-
-Подробнее о том, как приступить к разработке, описано в разделах
-[курса][course-url] `1.8 Настройка IDE`, `1.9 Работа с Git` и
-`1.10 Настройка SSH`.
-
-Для того чтобы собрать проект, и проверить, что все работает корректно, можно
-запустить из модального окна IDEA
-[Run Anything](https://www.jetbrains.com/help/idea/running-anything.html)
-команду:
-
-```shell
-mvn clean verify
+### Пример использования
+```bash
+java -jar ./fractals.jar --add-transformation disk --add-transformation swirl --path ./images/flame.png --seed 142857
 ```
 
-Альтернативно можно в терминале из корня проекта выполнить следующие команды.
+## What's going on inside?
+The managing entity is `FractalsApp` inherited from `AbstractFractalsApp` \
+The `void run(String[] args)` method builds the following pipeline:
+1. Get the `ParamsGetter` entity
+2. Use it to get the `Params` parameters
+3. Check the correctness of the parameters
+   1. If incorrect, exit
+4. Get the `ImageRenderer` entity
+5. Use it to generate the `PixelImage` image
+6. Get the `ImageCorrector` entity
+7. Correct the image obtained in step 5
+8. Get the `ImageSaver` entity
+9. Save the image
+10. Check the correctness of saving
 
-Для Unix (Linux, macOS, Cygwin, WSL):
+### A little bit about architecture
+The `AbstractFractalsApp` abstraction captures only the pipeline specified above,
+all other methods are abstract, return an interface type and must be overridden. \
+This allows the user to inherit from this class and decide for themselves which implementations of these interfaces they need
 
-```shell
-./mvnw clean verify
-```
+## Time measurements
+I conducted 5 measurements with different numbers of threads used, all other parameters being equal:
+### Measurement #1
+|           Версия            | Время в миллисекундах |
+|:---------------------------:|:---------------------:|
+|   SingleThreaded version    |         3137          |
+|  MultiThreaded (1 thread)   |         2568          |
+|  MultiThreaded (2 threads)  |         2703          |
+|  MultiThreaded (5 threads)  |         1101          |
+| MultiThreaded (10 threads)  |         1061          |
+| MultiThreaded (100 threads) |         1044          |
 
-Для Windows:
+### Measurement #2
+|           Версия            | Время в миллисекундах |
+|:---------------------------:|:---------------------:|
+|   SingleThreaded version    |         2766          |
+|  MultiThreaded (1 thread)   |         2501          |
+|  MultiThreaded (2 threads)  |         2654          |
+|  MultiThreaded (5 threads)  |         1137          |
+| MultiThreaded (10 threads)  |          973          |
+| MultiThreaded (100 threads) |          947          |
 
-```shell
-mvnw.cmd clean verify
-```
+### Measurement #3
+|           Версия            | Время в миллисекундах |
+|:---------------------------:|:---------------------:|
+|   SingleThreaded version    |         3136          |
+|  MultiThreaded (1 thread)   |         2735          |
+|  MultiThreaded (2 threads)  |         2945          |
+|  MultiThreaded (5 threads)  |         1145          |
+| MultiThreaded (10 threads)  |          975          |
+| MultiThreaded (100 threads) |         1044          |
 
-Для окончания сборки потребуется подождать какое-то время, пока maven скачает
-все необходимые зависимости, скомпилирует проект и прогонит базовый набор
-тестов.
+### Measurement #4
+|           Версия            | Время в миллисекундах |
+|:---------------------------:|:---------------------:|
+|   SingleThreaded version    |         2927          |
+|  MultiThreaded (1 thread)   |         2439          |
+|  MultiThreaded (2 threads)  |         2439          |
+|  MultiThreaded (5 threads)  |         1125          |
+| MultiThreaded (10 threads)  |         1002          |
+| MultiThreaded (100 threads) |         1004          |
 
-Если вы в процессе сборки получили ошибку:
+### Measurement #5
+|           Версия            | Время в миллисекундах |
+|:---------------------------:|:---------------------:|
+|   SingleThreaded version    |         3213          |
+|  MultiThreaded (1 thread)   |         2639          |
+|  MultiThreaded (2 threads)  |         2438          |
+|  MultiThreaded (5 threads)  |         1155          |
+| MultiThreaded (10 threads)  |         1095          |
+| MultiThreaded (100 threads) |         1079          |
 
-```shell
-Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion failed with message:
-JDK version must be at least 22
-```
+### Average time for 5 measurements
+|           Версия            | Время в миллисекундах |
+|:---------------------------:|:---------------------:|
+|   SingleThreaded version    |        3035.8         |
+|  MultiThreaded (1 thread)   |        2576.4         |
+|  MultiThreaded (2 threads)  |        2635.8         |
+|  MultiThreaded (5 threads)  |        1132.6         |
+| MultiThreaded (10 threads)  |        1021.2         |
+| MultiThreaded (100 threads) |        1023.6         |
 
-Значит, версия вашего JDK ниже 22.
+### Conclusions and patterns
++ single-threaded version of the program works slower than multithreaded with 1 thread
++ version with 2 threads on average works longer than version with 1 thread, but still faster than single-threaded
++ version with 5 threads works 3 times faster than single-threaded
++ version with 10 threads does not provide such a big increase in speed
++ version with 100 threads on average works a little worse than version with 10.
+  Most likely, this is due to the fact that too much time is spent waiting for resources and switching contexts
 
-Если же получили ошибку:
+## Likes
+<img src=images/likes/on_title.png width="500" height="800"  alt="title-image"/>
+<img src=images/likes/ten_images.png width="400" height="800"  alt="title-image"/>
 
-```shell
-Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion failed with message:
-Maven version should, at least, be 3.8.8
-```
+## Beautiful pictures
+<img src=images/fractals/1.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/2.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/3.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/4.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/5.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/6.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/7.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/8.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/9.png width="400" height="400"  alt="title-image"/>
+<img src=images/fractals/10.png width="400" height="400"  alt="title-image"/>
 
-Значит, у вас используется версия maven ниже 3.8.8. Такого не должно произойти,
-если вы запускаете сборку из IDEA или через `mvnw`-скрипты.
 
-Далее будут перечислены другие полезные команды maven.
 
-Запуск только компиляции основных классов:
-
-```shell
-mvn compile
-```
-
-Запуск тестов:
-
-```shell
-mvn test
-```
-
-Запуск линтеров:
-
-```shell
-mvn checkstyle:check modernizer:modernizer spotbugs:check pmd:check pmd:cpd-check
-```
-
-Вывод дерева зависимостей проекта (полезно при отладке транзитивных
-зависимостей):
-
-```shell
-mvn dependency:tree
-```
-
-Вывод вспомогательной информации о любом плагине (вместо `compiler` можно
-подставить интересующий вас плагин):
-
-```shell
-mvn help:describe -Dplugin=compiler
-```
-
-## Дополнительные материалы
-
-- Документация по maven: https://maven.apache.org/guides/index.html
-- Поиск зависимостей и их версий: https://central.sonatype.com/search
-- Документация по процессу автоматизированной сборки в среде github:
-  https://docs.github.com/en/actions
-- Документация по git: https://git-scm.com/doc
-- Javadoc для Java 22:
-  https://docs.oracle.com/en/java/javase/22/docs/api/index.html
-
-[course-url]: https://edu.tinkoff.ru/all-activities/courses/870efa9d-7067-4713-97ae-7db256b73eab
