@@ -27,7 +27,7 @@ You can run it with the `--help` flag and see the help
 + adds the specified transformation to the list of nonlinear transformations
 + can be used any number of times, but not less than one
 
-### Пример использования
+### Usage example
 ```bash
 java -jar ./fractals.jar --add-transformation disk --add-transformation swirl --path ./images/flame.png --seed 142857
 ```
@@ -55,64 +55,64 @@ This allows the user to inherit from this class and decide for themselves which 
 ## Time measurements
 I conducted 5 measurements with different numbers of threads used, all other parameters being equal:
 ### Measurement #1
-|           Версия            | Время в миллисекундах |
-|:---------------------------:|:---------------------:|
-|   SingleThreaded version    |         3137          |
-|  MultiThreaded (1 thread)   |         2568          |
-|  MultiThreaded (2 threads)  |         2703          |
-|  MultiThreaded (5 threads)  |         1101          |
-| MultiThreaded (10 threads)  |         1061          |
-| MultiThreaded (100 threads) |         1044          |
+|           Version           | Time in milliseconds |
+|:---------------------------:|:--------------------:|
+|   SingleThreaded version    |         3137         |
+|  MultiThreaded (1 thread)   |         2568         |
+|  MultiThreaded (2 threads)  |         2703         |
+|  MultiThreaded (5 threads)  |         1101         |
+| MultiThreaded (10 threads)  |         1061         |
+| MultiThreaded (100 threads) |         1044         |
 
 ### Measurement #2
-|           Версия            | Время в миллисекундах |
-|:---------------------------:|:---------------------:|
-|   SingleThreaded version    |         2766          |
-|  MultiThreaded (1 thread)   |         2501          |
-|  MultiThreaded (2 threads)  |         2654          |
-|  MultiThreaded (5 threads)  |         1137          |
-| MultiThreaded (10 threads)  |          973          |
-| MultiThreaded (100 threads) |          947          |
+|           Version           | Time in milliseconds |
+|:---------------------------:|:--------------------:|
+|   SingleThreaded version    |         2766         |
+|  MultiThreaded (1 thread)   |         2501         |
+|  MultiThreaded (2 threads)  |         2654         |
+|  MultiThreaded (5 threads)  |         1137         |
+| MultiThreaded (10 threads)  |         973          |
+| MultiThreaded (100 threads) |         947          |
 
 ### Measurement #3
-|           Версия            | Время в миллисекундах |
-|:---------------------------:|:---------------------:|
-|   SingleThreaded version    |         3136          |
-|  MultiThreaded (1 thread)   |         2735          |
-|  MultiThreaded (2 threads)  |         2945          |
-|  MultiThreaded (5 threads)  |         1145          |
-| MultiThreaded (10 threads)  |          975          |
-| MultiThreaded (100 threads) |         1044          |
+|           Version           | Time in milliseconds |
+|:---------------------------:|:--------------------:|
+|   SingleThreaded version    |         3136         |
+|  MultiThreaded (1 thread)   |         2735         |
+|  MultiThreaded (2 threads)  |         2945         |
+|  MultiThreaded (5 threads)  |         1145         |
+| MultiThreaded (10 threads)  |         975          |
+| MultiThreaded (100 threads) |         1044         |
 
 ### Measurement #4
-|           Версия            | Время в миллисекундах |
-|:---------------------------:|:---------------------:|
-|   SingleThreaded version    |         2927          |
-|  MultiThreaded (1 thread)   |         2439          |
-|  MultiThreaded (2 threads)  |         2439          |
-|  MultiThreaded (5 threads)  |         1125          |
-| MultiThreaded (10 threads)  |         1002          |
-| MultiThreaded (100 threads) |         1004          |
+|           Version           | Time in milliseconds |
+|:---------------------------:|:--------------------:|
+|   SingleThreaded version    |         2927         |
+|  MultiThreaded (1 thread)   |         2439         |
+|  MultiThreaded (2 threads)  |         2439         |
+|  MultiThreaded (5 threads)  |         1125         |
+| MultiThreaded (10 threads)  |         1002         |
+| MultiThreaded (100 threads) |         1004         |
 
 ### Measurement #5
-|           Версия            | Время в миллисекундах |
-|:---------------------------:|:---------------------:|
-|   SingleThreaded version    |         3213          |
-|  MultiThreaded (1 thread)   |         2639          |
-|  MultiThreaded (2 threads)  |         2438          |
-|  MultiThreaded (5 threads)  |         1155          |
-| MultiThreaded (10 threads)  |         1095          |
-| MultiThreaded (100 threads) |         1079          |
+|           Version           | Time in milliseconds |
+|:---------------------------:|:--------------------:|
+|   SingleThreaded version    |         3213         |
+|  MultiThreaded (1 thread)   |         2639         |
+|  MultiThreaded (2 threads)  |         2438         |
+|  MultiThreaded (5 threads)  |         1155         |
+| MultiThreaded (10 threads)  |         1095         |
+| MultiThreaded (100 threads) |         1079         |
 
 ### Average time for 5 measurements
-|           Версия            | Время в миллисекундах |
-|:---------------------------:|:---------------------:|
-|   SingleThreaded version    |        3035.8         |
-|  MultiThreaded (1 thread)   |        2576.4         |
-|  MultiThreaded (2 threads)  |        2635.8         |
-|  MultiThreaded (5 threads)  |        1132.6         |
-| MultiThreaded (10 threads)  |        1021.2         |
-| MultiThreaded (100 threads) |        1023.6         |
+|           Version           | Time in milliseconds |
+|:---------------------------:|:--------------------:|
+|   SingleThreaded version    |        3035.8        |
+|  MultiThreaded (1 thread)   |        2576.4        |
+|  MultiThreaded (2 threads)  |        2635.8        |
+|  MultiThreaded (5 threads)  |        1132.6        |
+| MultiThreaded (10 threads)  |        1021.2        |
+| MultiThreaded (100 threads) |        1023.6        |
 
 ### Conclusions and patterns
 + single-threaded version of the program works slower than multithreaded with 1 thread
