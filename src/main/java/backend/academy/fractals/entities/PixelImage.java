@@ -1,8 +1,8 @@
 package backend.academy.fractals.entities;
 
-import lombok.Getter;
 import java.util.Arrays;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class PixelImage {
     private final Pixel[] pixels;
@@ -27,12 +27,12 @@ public class PixelImage {
     }
 
     private Pixel[] constructEmpty(int width, int height) {
-        Pixel[] pixels = new Pixel[width * height];
+        Pixel[] constructedPixels = new Pixel[width * height];
 
         for (int i = 0; i < width * height; ++i) {
-            pixels[i] = new Pixel(new Color(0, 0, 0), 0);
+            constructedPixels[i] = new Pixel(new Color(0, 0, 0), 0);
         }
 
-        return pixels;
+        return constructedPixels;
     }
 }
