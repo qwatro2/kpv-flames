@@ -10,7 +10,7 @@ public class AffineTransformation implements Transformation {
     private final double e;
     private final double f;
 
-    private AffineTransformation(double a, double b, double c, double d, double e, double f) {
+    protected AffineTransformation(double a, double b, double c, double d, double e, double f) {
         this.a = a;
         this.b = b;
         this.c = c;
