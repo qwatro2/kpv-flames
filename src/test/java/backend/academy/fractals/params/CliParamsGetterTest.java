@@ -155,13 +155,13 @@ class CliParamsGetterTest {
     void testGet_InvalidPath() {
         String[] args = {
             "--add-transformation", "disk",
-            "--path", "invalid?\\path?\\to\\image"
+            "--path", "invalid<\\path>\\to\\image"
         };
 
         CliParamsGetter getter = new CliParamsGetter(args);
         Params params = getter.get();
 
         assertFalse(params.isSuccess());
-        assertEquals("Invalid path \"invalid?\\path?\\to\\image\"", params.message());
+        assertEquals("Invalid path \"invalid<\\path>\\to\\image\"", params.message());
     }
 }
