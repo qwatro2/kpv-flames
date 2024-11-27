@@ -11,10 +11,10 @@ import backend.academy.fractals.transformations.SinusTransformation;
 import backend.academy.fractals.transformations.SphereTransformation;
 import backend.academy.fractals.transformations.SwirlTransformation;
 import backend.academy.fractals.transformations.Transformation;
-import org.apache.commons.lang3.StringUtils;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
+import org.apache.commons.lang3.StringUtils;
 
 public class ParamsViewer implements Viewer<Params> {
     private static final int ROWS = 4;
@@ -25,16 +25,16 @@ public class ParamsViewer implements Viewer<Params> {
     private static final String PARAMETER = "Parameter";
     private static final String VALUE = "Value";
 
-    private static final List<String> firstColumn = List.of(
+    private static final List<String> FIRST_COLUMN = List.of(
         "Number of samples", "Number of transformations",
         "Number of iterations per sample", "Number of symmetries"
     );
 
-    private static final List<String> secondColumn = List.of(
+    private static final List<String> SECOND_COLUMN = List.of(
         "Width", "Height", "Nonlinear transformations", "Nonlinear transformations order"
     );
 
-    private static final List<String> thirdColumn = List.of(
+    private static final List<String> THIRD_COLUMN = List.of(
         "Path", "Image format", "Number of threads", "Seed"
     );
 
@@ -44,8 +44,8 @@ public class ParamsViewer implements Viewer<Params> {
 
         String[] grid = getGrid(value);
         List<Integer> maxLengthsByCol = IntStream.range(0, COLS)
-            .mapToObj(col -> calculateMaxLength(grid, col)).
-            toList();
+            .mapToObj(col -> calculateMaxLength(grid, col))
+            .toList();
 
         addLine(stringBuilder, maxLengthsByCol);
         stringBuilder.append('|');
@@ -106,9 +106,9 @@ public class ParamsViewer implements Viewer<Params> {
             String.valueOf(params.seed())
         );
 
-        fillNColumn(result, firstColumn, firstValues, FIRST_COL);
-        fillNColumn(result, secondColumn, secondValues, SECOND_COL);
-        fillNColumn(result, thirdColumn, thirdValues, THIRD_COL);
+        fillNColumn(result, FIRST_COLUMN, firstValues, FIRST_COL);
+        fillNColumn(result, SECOND_COLUMN, secondValues, SECOND_COL);
+        fillNColumn(result, THIRD_COLUMN, thirdValues, THIRD_COL);
         return result;
     }
 
@@ -139,8 +139,8 @@ public class ParamsViewer implements Viewer<Params> {
 
     private String viewListOfString(List<String> list) {
         return '[' + String.join(", ",
-            list.stream().map(s -> "\"" + s + "\"").toList()) +
-            ']';
+            list.stream().map(s -> "\"" + s + "\"").toList())
+            + ']';
     }
 
     private String viewNonlinearTransformation(Transformation transformation) {
