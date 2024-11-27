@@ -121,7 +121,8 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
         Transformation nonlinearTransformation, Point point,
         PixelImage canvas, Color color
     ) {
-        point = affineTransformation.andThen(nonlinearTransformation).apply(point);
+        Point pointCopy = new Point(point.x(), point.y());
+        point = affineTransformation.andThen(nonlinearTransformation).apply(pointCopy);
 
         if (iter >= 0) {
             double theta2 = 0.0;
@@ -167,6 +168,6 @@ public abstract class AbstractImageRenderer implements ImageRenderer {
     }
 
     private <T> List<T> generateList(Generator<T> generator, int size) {
-        return IntStream.range(0, size).mapToObj(_ -> generator.next()).toList();
+        return IntStream.range(0, size).mapToObj(idx -> generator.next()).toList();
     }
 }
