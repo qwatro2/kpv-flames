@@ -40,9 +40,9 @@ public class GammaImageCorrector implements ImageCorrector {
                 normals[row * width + col] /= max;
                 Pixel currentPixel = image.get(row, col);
                 double multiplier = Math.pow(normals[row * width + col], 1.0 / gamma);
-                int newR = (int)(currentPixel.color().r() * multiplier);
-                int newG = (int)(currentPixel.color().g() * multiplier);
-                int newB = (int)(currentPixel.color().b() * multiplier);
+                int newR = (int) (currentPixel.color().r() * multiplier);
+                int newG = (int) (currentPixel.color().g() * multiplier);
+                int newB = (int) (currentPixel.color().b() * multiplier);
                 currentPixel.color(new Color(newR, newG, newB));
             }
         }
