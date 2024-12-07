@@ -1,12 +1,12 @@
 package backend.academy.fractals.app;
 
 import backend.academy.fractals.correctors.GammaImageCorrector;
-import backend.academy.fractals.params.CliParamsGetter;
+import backend.academy.fractals.paramsgetters.CliParamsGetter;
 import backend.academy.fractals.params.ImageFormat;
 import backend.academy.fractals.params.NonlinearTransformationsGenerationOrder;
 import backend.academy.fractals.params.NumbersParams;
 import backend.academy.fractals.params.Params;
-import backend.academy.fractals.params.ParamsGetter;
+import backend.academy.fractals.paramsgetters.ParamsGetter;
 import backend.academy.fractals.params.SaveParams;
 import backend.academy.fractals.params.SizeParams;
 import backend.academy.fractals.params.TransformationsParams;

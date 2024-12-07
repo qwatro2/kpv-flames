@@ -1,5 +1,8 @@
-package backend.academy.fractals.params;
+package backend.academy.fractals.paramsgetters;
 
+import backend.academy.fractals.params.ImageFormat;
+import backend.academy.fractals.params.NonlinearTransformationsGenerationOrder;
+import backend.academy.fractals.params.Params;
 import backend.academy.fractals.transformations.DiskTransformation;
 import backend.academy.fractals.transformations.EyefishTransformation;
 import backend.academy.fractals.transformations.HandkerchiefTransformation;

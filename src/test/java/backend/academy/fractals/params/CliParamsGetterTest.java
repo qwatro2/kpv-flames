@@ -1,6 +1,7 @@
 package backend.academy.fractals.params;
 
 import static org.junit.jupiter.api.Assertions.*;
+import backend.academy.fractals.paramsgetters.CliParamsGetter;
 import backend.academy.fractals.transformations.DiskTransformation;
 import backend.academy.fractals.transformations.HearthTransformation;
 import org.junit.jupiter.api.Test;
