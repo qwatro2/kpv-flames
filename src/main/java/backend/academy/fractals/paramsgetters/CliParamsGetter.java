@@ -68,16 +68,12 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
         processIntegerParam(params, n -> params.sizeParams().height(n), index);
     }
 
-    private void processSeed(Params params, int index) {
-        Long value = ParsingUtils.parseLong(args[index + 1]);
-        if (value == null) {
-            params.isSuccess(false);
-            params.message(MessageFormat.format("Argument \"{0}\" should be long integer, \"{1}\" was passed",
-                args[index], args[index + 1]));
-            return;
-        }
+    private void processNumberOfSymmetries(Params params, int index) {
+        processIntegerParam(params, n -> params.numbersParams().numberOfSymmetries(n), index);
+    }
 
-        params.seed(value);
+    private void processNumberOfThreads(Params params, int index) {
+        processIntegerParam(params, params::numberOfThreads, index);
     }
 
     private void processAddTransformation(Params params, int index) {
@@ -104,10 +100,6 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
         params.transformationsParams().generationOrder(value);
     }
 
-    private void processNumberOfSymmetries(Params params, int index) {
-        processIntegerParam(params, n -> params.numbersParams().numberOfSymmetries(n), index);
-    }
-
     private void processPath(Params params, int index) {
         Path value = ParsingUtils.parsePath(args[index + 1]);
         if (value == null) {
@@ -129,8 +121,16 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
         params.saveParams().format(value);
     }
 
-    private void processNumberOfThreads(Params params, int index) {
-        processIntegerParam(params, params::numberOfThreads, index);
+    private void processSeed(Params params, int index) {
+        Long value = ParsingUtils.parseLong(args[index + 1]);
+        if (value == null) {
+            params.isSuccess(false);
+            params.message(MessageFormat.format("Argument \"{0}\" should be long integer, \"{1}\" was passed",
+                args[index], args[index + 1]));
+            return;
+        }
+
+        params.seed(value);
     }
 
     private <T> void processIntegerParam(Params params, Function<Integer, T> field, int index) {
