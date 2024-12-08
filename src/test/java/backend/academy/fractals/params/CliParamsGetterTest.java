@@ -135,7 +135,7 @@ class CliParamsGetterTest {
         Params params = getter.get();
 
         assertFalse(params.isSuccess());
-        assertEquals("Argument \"--generation-order\" should be \"ordered\"|\"random\", unknownOrder was passed", params.message());
+        assertEquals("Argument \"--generation-order\" should be \"ordered\"|\"random\", \"unknownOrder\" was passed", params.message());
     }
 
     @Test

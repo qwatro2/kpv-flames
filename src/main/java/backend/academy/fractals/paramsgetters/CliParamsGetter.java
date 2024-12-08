@@ -1,16 +1,15 @@
 package backend.academy.fractals.paramsgetters;
 
 import backend.academy.fractals.commons.ParsingUtils;
-import backend.academy.fractals.params.ImageFormat;
-import backend.academy.fractals.params.NonlinearTransformationsGenerationOrder;
 import backend.academy.fractals.params.Params;
-import backend.academy.fractals.transformations.Transformation;
-import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.function.Function;
 
 public class CliParamsGetter extends AbstractCliParamsGetter {
-    private static final String ONE_WAS_PASSED = "{1} was passed";
+    private static final List<String> VALID_TRANSFORMATIONS = List.of(
+        "disk", "hearth", "polar", "sinus", "sphere", "swirl", "horseshoe", "handkerchief", "eyefish"
+    );
 
     public CliParamsGetter(String[] args) {
         super(args);
@@ -77,64 +76,45 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     }
 
     private void processAddTransformation(Params params, int index) {
-        Transformation value = ParsingUtils.parseTransformation(args[index + 1]);
-        if (value == null) {
-            params.isSuccess(false);
-            params.message(MessageFormat.format("Argument \"{0}\" should be \"disk\"|\"hearth\"|\"polar\"|"
-                    + "\"sinus\"|\"sphere\"|\"swirl\"|\"horseshoe\"|"
-                    + "\"handkerchief\"|\"eyefish\", \"{1}\" was passed",
-                args[index], args[index + 1]));
-            return;
-        }
-        params.transformationsParams().nonlinearTransformations().add(value);
+        process(params, value -> params.transformationsParams().nonlinearTransformations().add(value),
+            index, ParsingUtils::parseTransformation, String.join("|",
+                VALID_TRANSFORMATIONS.stream().map(s -> "\"" + s + "\"").toList()));
     }
 
     private void processGenerationOrder(Params params, int index) {
-        NonlinearTransformationsGenerationOrder value = ParsingUtils.parseGenerationOrder(args[index + 1]);
-        if (value == null) {
-            params.isSuccess(false);
-            params.message(MessageFormat.format("Argument \"{0}\" should be \"ordered\"|\"random\", "
-                + ONE_WAS_PASSED, args[index], args[index + 1]));
-            return;
-        }
-        params.transformationsParams().generationOrder(value);
+        process(params, value -> params.transformationsParams().generationOrder(value), index,
+            ParsingUtils::parseGenerationOrder, "\"ordered\"|\"random\"");
     }
 
     private void processPath(Params params, int index) {
-        Path value = ParsingUtils.parsePath(args[index + 1]);
-        if (value == null) {
-            params.isSuccess(false);
-            params.message(MessageFormat.format("Invalid path \"{0}\"", args[index + 1]));
-            return;
-        }
-        params.saveParams().path(value);
+        process(params, value -> params.saveParams().path(value), index, ParsingUtils::parsePath, "valid path");
     }
 
     private void processFormat(Params params, int index) {
-        ImageFormat value = ParsingUtils.parseImageFormat(args[index + 1]);
-        if (value == null) {
-            params.isSuccess(false);
-            params.message(MessageFormat.format("Argument \"{0}\" should be \"png\"|\"jpeg\"|\"bmp\", "
-                + ONE_WAS_PASSED, args[index], args[index + 1]));
-            return;
-        }
-        params.saveParams().format(value);
+        process(params, value -> params.saveParams().format(value), index, ParsingUtils::parseImageFormat,
+            "\"png\"|\"jpeg\"|\"bmp\"");
     }
 
     private void processSeed(Params params, int index) {
-        processNumeric(params, params::seed, index, ParsingUtils::parseLong, "long integer");
+        process(params, params::seed, index, ParsingUtils::parseLong, "long integer");
     }
 
     private <T> void processIntegerParam(Params params, Function<Integer, T> field, int index) {
-        processNumeric(params, field, index, ParsingUtils::parseInteger, "integer");
+        process(params, field, index, ParsingUtils::parseInteger, "integer");
     }
 
-    private <T, R> void processNumeric(Params params, Function<T, R> field, int index, Function<String, T> parser, String typename) {
+    private <T, R> void process(
+        Params params,
+        Function<T, R> field,
+        int index,
+        Function<String, T> parser,
+        String valid
+    ) {
         T value = parser.apply(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be {2}, \"{1}\" was passed",
-                args[index], args[index + 1], typename));
+                args[index], args[index + 1], valid));
         } else {
             field.apply(value);
         }
