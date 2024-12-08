@@ -16,63 +16,45 @@ import backend.academy.fractals.transformations.Transformation;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.util.Objects;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public class CliParamsGetter implements ParamsGetter {
+public class CliParamsGetter extends AbstractCliParamsGetter {
     private static final String ONE_WAS_PASSED = "{1} was passed";
 
-    private final String[] args;
-
     public CliParamsGetter(String[] args) {
-        this.args = args;
+        super(args);
+        this.addParam("--n-samples", 1, this::processNumberOfSamples)
+            .addParam("--n-transformations", 1, this::processNumberOfTransformations)
+            .addParam("--n-iterations", 1, this::processNumberOfIterations)
+            .addParam("--width", 1, this::processWidth)
+            .addParam("--height", 1, this::processHeight)
+            .addParam("--seed", 1, this::processSeed)
+            .addParam("--add-transformation", 1, this::processAddTransformation)
+            .addParam("--generation-order", 1, this::processGenerationOrder)
+            .addParam("--n-symmetries", 1, this::processNumberOfSymmetries)
+            .addParam("--path", 1, this::processPath)
+            .addParam("--format", 1, this::processFormat)
+            .addParam("--n-threads", 1, this::processNumberOfThreads);
     }
 
     @Override
-    public Params get() {
-        Params result = new Params();
-
-        if (!processHelp(args, result)) {
-            return result;
-        }
-
-        for (int i = 0; i < args.length - 1; i += 2) {
-            BiConsumer<Params, Integer> biConsumer = switch (args[i]) {
-                case "--n-samples" -> this::processNumberOfSamples;
-                case "--n-transformations" -> this::processNumberOfTransformations;
-                case "--n-iterations" -> this::processNumberOfIterations;
-                case "--width" -> this::processWidth;
-                case "--height" -> this::processHeight;
-                case "--seed" -> this::processSeed;
-                case "--add-transformation" -> this::processAddTransformation;
-                case "--generation-order" -> this::processGenerationOrder;
-                case "--n-symmetries" -> this::processNumberOfSymmetries;
-                case "--path" -> this::processPath;
-                case "--format" -> this::processFormat;
-                case "--n-threads" -> this::processNumberOfThreads;
-                default -> this::processUnknownArgument;
-            };
-            biConsumer.accept(result, i);
-            if (!result.isSuccess()) {
-                return result;
-            }
-        }
-
-        checkAddedTransformations(result);
-        return result;
+    protected void processHelp(Params params, int index) {
+        params.isSuccess(false);
+        params.message(getHelpString());
     }
 
-    private void checkAddedTransformations(Params params) {
+    @Override
+    protected void processUnknownArgument(Params params, int index) {
+        params.isSuccess(false);
+        params.message(MessageFormat.format("Unknown argument {0}", args[index]));
+    }
+
+    @Override
+    protected void checkProcessedParams(Params params) {
         if (params.transformationsParams().nonlinearTransformations().isEmpty()) {
             params.isSuccess(false);
             params.message("At least one nonlinear transformation must be added");
         }
-    }
-
-    private void processUnknownArgument(Params params, int index) {
-        params.isSuccess(false);
-        params.message(MessageFormat.format("Unknown argument {0}", args[index]));
     }
 
     private void processNumberOfSamples(Params params, int index) {
@@ -229,14 +211,6 @@ public class CliParamsGetter implements ParamsGetter {
         } catch (InvalidPathException e) {
             return null;
         }
-    }
-
-    private boolean processHelp(String[] args, Params params) {
-        if (args.length > 0 && (Objects.equals(args[0], "--help") || Objects.equals(args[0], "-h"))) {
-            params.isSuccess(false);
-            params.message(getHelpString());
-        }
-        return params.isSuccess();
     }
 
     private String getHelpString() {
