@@ -1,5 +1,5 @@
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/central-university-dev/backend_academy_2024_project_4-java-qwatro2/blob/master/README.md)
-[![pt-br](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/central-university-dev/backend_academy_2024_project_4-java-qwatro2/blob/master/README.ru.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/qwatro2/kpv-flames/blob/main/README.md)
+[![pt-br](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/qwatro2/kpv-flames/blob/main/README.ru.md)
 
 # Fractal Flame
 <img src=images/title.png width="400" height="400"  alt="title-image"/>
