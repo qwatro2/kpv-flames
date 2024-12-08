@@ -122,27 +122,19 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     }
 
     private void processSeed(Params params, int index) {
-        Long value = ParsingUtils.parseLong(args[index + 1]);
-        if (value == null) {
-            params.isSuccess(false);
-            params.message(MessageFormat.format("Argument \"{0}\" should be long integer, \"{1}\" was passed",
-                args[index], args[index + 1]));
-            return;
-        }
-
-        params.seed(value);
+        processNumeric(params, params::seed, index, ParsingUtils::parseLong, "long integer");
     }
 
     private <T> void processIntegerParam(Params params, Function<Integer, T> field, int index) {
-        Integer value = ParsingUtils.parseInteger(args[index + 1]);
+        processNumeric(params, field, index, ParsingUtils::parseInteger, "integer");
+    }
+
+    private <T, R> void processNumeric(Params params, Function<T, R> field, int index, Function<String, T> parser, String typename) {
+        T value = parser.apply(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
-            params.message(MessageFormat.format("Argument \"{0}\" should be integer, \"{1}\" was passed",
-                args[index], args[index + 1]));
-        } else if (value < 1) {
-            params.isSuccess(false);
-            params.message(MessageFormat.format("Argument \"{0}\" should be integer greater than "
-                + "or equal to 1, " + ONE_WAS_PASSED, args[index], args[index + 1]));
+            params.message(MessageFormat.format("Argument \"{0}\" should be {2}, \"{1}\" was passed",
+                args[index], args[index + 1], typename));
         } else {
             field.apply(value);
         }
