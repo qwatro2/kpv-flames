@@ -1,19 +1,10 @@
 package backend.academy.fractals.paramsgetters;
 
+import backend.academy.fractals.commons.ParsingUtils;
 import backend.academy.fractals.params.ImageFormat;
 import backend.academy.fractals.params.NonlinearTransformationsGenerationOrder;
 import backend.academy.fractals.params.Params;
-import backend.academy.fractals.transformations.DiskTransformation;
-import backend.academy.fractals.transformations.EyefishTransformation;
-import backend.academy.fractals.transformations.HandkerchiefTransformation;
-import backend.academy.fractals.transformations.HearthTransformation;
-import backend.academy.fractals.transformations.HorseshoeTransformation;
-import backend.academy.fractals.transformations.PolarTransformation;
-import backend.academy.fractals.transformations.SinusTransformation;
-import backend.academy.fractals.transformations.SphereTransformation;
-import backend.academy.fractals.transformations.SwirlTransformation;
 import backend.academy.fractals.transformations.Transformation;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.function.Function;
@@ -78,7 +69,7 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     }
 
     private void processSeed(Params params, int index) {
-        Long value = parseLong(args[index + 1]);
+        Long value = ParsingUtils.parseLong(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be long integer, \"{1}\" was passed",
@@ -90,7 +81,7 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     }
 
     private void processAddTransformation(Params params, int index) {
-        Transformation value = parseTransformation(args[index + 1]);
+        Transformation value = ParsingUtils.parseTransformation(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be \"disk\"|\"hearth\"|\"polar\"|"
@@ -103,7 +94,7 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     }
 
     private void processGenerationOrder(Params params, int index) {
-        NonlinearTransformationsGenerationOrder value = parseGenerationOrder(args[index + 1]);
+        NonlinearTransformationsGenerationOrder value = ParsingUtils.parseGenerationOrder(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be \"ordered\"|\"random\", "
@@ -118,7 +109,7 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     }
 
     private void processPath(Params params, int index) {
-        Path value = parsePath(args[index + 1]);
+        Path value = ParsingUtils.parsePath(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Invalid path \"{0}\"", args[index + 1]));
@@ -128,7 +119,7 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     }
 
     private void processFormat(Params params, int index) {
-        ImageFormat value = parseImageFormat(args[index + 1]);
+        ImageFormat value = ParsingUtils.parseImageFormat(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be \"png\"|\"jpeg\"|\"bmp\", "
@@ -143,7 +134,7 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     }
 
     private <T> void processIntegerParam(Params params, Function<Integer, T> field, int index) {
-        Integer value = parseInteger(args[index + 1]);
+        Integer value = ParsingUtils.parseInteger(args[index + 1]);
         if (value == null) {
             params.isSuccess(false);
             params.message(MessageFormat.format("Argument \"{0}\" should be integer, \"{1}\" was passed",
@@ -154,62 +145,6 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
                 + "or equal to 1, " + ONE_WAS_PASSED, args[index], args[index + 1]));
         } else {
             field.apply(value);
-        }
-    }
-
-    private Long parseLong(String s) {
-        try {
-            return Long.parseLong(s);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    private Integer parseInteger(String s) {
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    private Transformation parseTransformation(String s) {
-        return switch (s) {
-            case "disk" -> new DiskTransformation();
-            case "hearth" -> new HearthTransformation();
-            case "polar" -> new PolarTransformation();
-            case "sinus" -> new SinusTransformation();
-            case "sphere" -> new SphereTransformation();
-            case "swirl" -> new SwirlTransformation();
-            case "horseshoe" -> new HorseshoeTransformation();
-            case "handkerchief" -> new HandkerchiefTransformation();
-            case "eyefish" -> new EyefishTransformation();
-            default -> null;
-        };
-    }
-
-    private NonlinearTransformationsGenerationOrder parseGenerationOrder(String s) {
-        return switch (s) {
-            case "ordered" -> NonlinearTransformationsGenerationOrder.ORDERED;
-            case "random" -> NonlinearTransformationsGenerationOrder.RANDOM;
-            default -> null;
-        };
-    }
-
-    private ImageFormat parseImageFormat(String s) {
-        return switch (s.toLowerCase()) {
-            case "png" -> ImageFormat.PNG;
-            case "jpeg" -> ImageFormat.JPEG;
-            case "bmp" -> ImageFormat.BMP;
-            default -> null;
-        };
-    }
-
-    private Path parsePath(String s) {
-        try {
-            return Path.of(s);
-        } catch (InvalidPathException e) {
-            return null;
         }
     }
 
