@@ -4,11 +4,28 @@ import backend.academy.fractals.commons.ParsingUtils;
 import backend.academy.fractals.params.Params;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class CliParamsGetter extends AbstractCliParamsGetter {
     private static final List<String> VALID_TRANSFORMATIONS = List.of(
         "disk", "hearth", "polar", "sinus", "sphere", "swirl", "horseshoe", "handkerchief", "eyefish"
+    );
+
+    private static final Map<String, Function<Params, Integer>> POSITIVE_INTEGER_FIELDS = Map.of(
+        "--n-samples", params -> params.numbersParams().numberOfSamples(),
+        "--n-iterations", params -> params.numbersParams().numberOfIterationsPerSample(),
+        "--n-symmetries", params -> params.numbersParams().numberOfSymmetries(),
+        "--n-transformations", params -> params.numbersParams().numberOfTransformations(),
+        "--n-threads", Params::numberOfThreads,
+        "--width", params -> params.sizeParams().width(),
+        "--height", params -> params.sizeParams().height()
+    );
+
+    private final List<Predicate<Params>> checkPipeline = List.of(
+        this::checkIntegerParams,
+        this::checkTransformations
     );
 
     public CliParamsGetter(String[] args) {
@@ -41,10 +58,34 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
 
     @Override
     protected void checkProcessedParams(Params params) {
+        for (Predicate<Params> predicate : checkPipeline) {
+            if (!predicate.test(params)) {
+                return;
+            }
+        }
+    }
+
+    private boolean checkIntegerParams(Params params) {
+        for (Map.Entry<String, Function<Params, Integer>> entry: POSITIVE_INTEGER_FIELDS.entrySet()) {
+            String argument = entry.getKey();
+            Function<Params, Integer> field = entry.getValue();
+            Integer fieldValue = field.apply(params);
+            if (fieldValue != null && fieldValue < 1) {
+                params.isSuccess(false);
+                params.message(MessageFormat.format("Argument \"{0}\" should be positive integer, "
+                    + "\"{1}\" was passed", argument, field.apply(params)));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkTransformations(Params params) {
         if (params.transformationsParams().nonlinearTransformations().isEmpty()) {
             params.isSuccess(false);
             params.message("At least one nonlinear transformation must be added");
         }
+        return params.isSuccess();
     }
 
     private void processNumberOfSamples(Params params, int index) {
