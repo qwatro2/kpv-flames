@@ -11,5 +11,4 @@ import lombok.Setter;
 public class TransformationsParams {
     private List<Transformation> nonlinearTransformations = new ArrayList<>();
     private NonlinearTransformationsGenerationOrder generationOrder = NonlinearTransformationsGenerationOrder.ORDERED;
-
 }
