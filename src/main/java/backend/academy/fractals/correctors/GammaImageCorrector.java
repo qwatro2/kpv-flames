@@ -18,6 +18,11 @@ public class GammaImageCorrector implements ImageCorrector {
 
     @Override
     public void correct(PixelImage image) {
+        NormalsAndMaxPair pair = calculateNormalsAndMax(image);
+        processCorrection(image, pair);
+    }
+
+    private NormalsAndMaxPair calculateNormalsAndMax(PixelImage image) {
         int width = image.width();
         int height = image.height();
 
@@ -35,6 +40,16 @@ public class GammaImageCorrector implements ImageCorrector {
             }
         }
 
+        return new NormalsAndMaxPair(normals, max);
+    }
+
+    private void processCorrection(PixelImage image, NormalsAndMaxPair pair) {
+        int width = image.width();
+        int height = image.height();
+
+        double[] normals = pair.normals();
+        double max = pair.max();
+
         for (int row = 0; row < height; ++row) {
             for (int col = 0; col < width; ++col) {
                 normals[row * width + col] /= max;
@@ -47,4 +62,6 @@ public class GammaImageCorrector implements ImageCorrector {
             }
         }
     }
+
+    private record NormalsAndMaxPair(double[] normals, double max) {}
 }
