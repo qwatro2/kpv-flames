@@ -8,11 +8,13 @@ public abstract class AbstractCliParamsGetter implements ParamsGetter {
     private final Map<String, ModifierAndNumberOfArguments> map;
     protected final String[] args;
 
-    protected AbstractCliParamsGetter(String[] args) {
+    protected AbstractCliParamsGetter(String[] args, boolean addHelp) {
         this.map = new HashMap<>();
         this.args = args;
-        this.addParam("-h", 0, this::processHelp)
-            .addParam("--help", 0, this::processHelp);
+        if (addHelp) {
+            this.addParam("-h", 0, this::processHelp)
+                .addParam("--help", 0, this::processHelp);
+        }
     }
 
     protected AbstractCliParamsGetter addParam(

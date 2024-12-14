@@ -29,7 +29,11 @@ public class CliParamsGetter extends AbstractCliParamsGetter {
     );
 
     public CliParamsGetter(String[] args) {
-        super(args);
+        this(args, true);
+    }
+
+    public CliParamsGetter(String[] args, boolean addHelp) {
+        super(args, addHelp);
         this.addParam("--n-samples", 1, this::processNumberOfSamples)
             .addParam("--n-transformations", 1, this::processNumberOfTransformations)
             .addParam("--n-iterations", 1, this::processNumberOfIterations)
