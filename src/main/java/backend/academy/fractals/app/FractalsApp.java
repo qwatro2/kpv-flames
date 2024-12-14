@@ -6,9 +6,9 @@ import backend.academy.fractals.factories.ConcreteNonlinearTransformationGenerat
 import backend.academy.fractals.factories.ConcretePointGeneratorFactory;
 import backend.academy.fractals.generators.AffineTransformationGenerator;
 import backend.academy.fractals.generators.ColorGenerator;
-import backend.academy.fractals.params.CliParamsGetter;
+import backend.academy.fractals.paramsgetters.CliParamsGetter;
 import backend.academy.fractals.params.Params;
-import backend.academy.fractals.params.ParamsGetter;
+import backend.academy.fractals.paramsgetters.ParamsGetter;
 import backend.academy.fractals.renderers.ImageRenderer;
 import backend.academy.fractals.renderers.MultiThreadedImageRenderer;
 import backend.academy.fractals.renderers.SingleThreadedImageRenderer;

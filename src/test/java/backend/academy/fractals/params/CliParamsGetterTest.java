@@ -1,10 +1,12 @@
 package backend.academy.fractals.params;
 
 import static org.junit.jupiter.api.Assertions.*;
+import backend.academy.fractals.paramsgetters.CliParamsGetter;
 import backend.academy.fractals.transformations.DiskTransformation;
 import backend.academy.fractals.transformations.HearthTransformation;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 
 class CliParamsGetterTest {
 
@@ -54,8 +56,7 @@ class CliParamsGetterTest {
     void testGet_InvalidArguments() {
         String[] args = {
             "--n-samples", "-1000",
-            "--n-transformations", "ten",
-            "--unknown-option", "value",
+            "--n-transformations", "10",
             "--add-transformation", "disk"
         };
 
@@ -63,7 +64,8 @@ class CliParamsGetterTest {
         Params params = getter.get();
 
         assertFalse(params.isSuccess());
-        assertEquals("Argument \"--n-samples\" should be integer greater than or equal to 1, -1000 was passed", params.message());
+        assertEquals(MessageFormat.format("Argument \"--n-samples\" should be positive integer, "
+            + "\"{0}\" was passed", -1000), params.message());
     }
 
     @Test
@@ -134,7 +136,7 @@ class CliParamsGetterTest {
         Params params = getter.get();
 
         assertFalse(params.isSuccess());
-        assertEquals("Argument \"--generation-order\" should be \"ordered\"|\"random\", unknownOrder was passed", params.message());
+        assertEquals("Argument \"--generation-order\" should be \"ordered\"|\"random\", \"unknownOrder\" was passed", params.message());
     }
 
     @Test

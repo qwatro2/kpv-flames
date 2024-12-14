@@ -3,7 +3,7 @@ package backend.academy.fractals.app;
 import backend.academy.fractals.correctors.ImageCorrector;
 import backend.academy.fractals.entities.PixelImage;
 import backend.academy.fractals.params.Params;
-import backend.academy.fractals.params.ParamsGetter;
+import backend.academy.fractals.paramsgetters.ParamsGetter;
 import backend.academy.fractals.renderers.ImageRenderer;
 import backend.academy.fractals.savers.ImageSaver;
 
